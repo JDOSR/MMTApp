@@ -6,13 +6,13 @@
 //  Copyright (c) 2015 Jason Owens. All rights reserved.
 //
 
-#import "ViewController.h"
+#import "MMTViewController.h"
 
-@interface ViewController ()
+@interface MMTViewController ()
 
 @end
 
-@implementation ViewController
+@implementation MMTViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];

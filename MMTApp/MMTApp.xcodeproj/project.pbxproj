@@ -7,14 +7,19 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		606140CC1AA27021008629AA /* CoreBluetooth.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 606140CB1AA27021008629AA /* CoreBluetooth.framework */; };
+		606140CF1AA27143008629AA /* MMTBeacons.m in Sources */ = {isa = PBXBuildFile; fileRef = 606140CE1AA27143008629AA /* MMTBeacons.m */; };
 		60BBCDB81AA17BF6007ED21C /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 60BBCDB71AA17BF6007ED21C /* main.m */; };
 		60BBCDBB1AA17BF6007ED21C /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 60BBCDBA1AA17BF6007ED21C /* AppDelegate.m */; };
 		60BBCDBE1AA17BF6007ED21C /* MMTApp.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 60BBCDBC1AA17BF6007ED21C /* MMTApp.xcdatamodeld */; };
-		60BBCDC11AA17BF6007ED21C /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 60BBCDC01AA17BF6007ED21C /* ViewController.m */; };
+		60BBCDC11AA17BF6007ED21C /* MMTViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 60BBCDC01AA17BF6007ED21C /* MMTViewController.m */; };
 		60BBCDC41AA17BF6007ED21C /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 60BBCDC21AA17BF6007ED21C /* Main.storyboard */; };
 		60BBCDC61AA17BF6007ED21C /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 60BBCDC51AA17BF6007ED21C /* Images.xcassets */; };
 		60BBCDC91AA17BF6007ED21C /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 60BBCDC71AA17BF6007ED21C /* LaunchScreen.xib */; };
 		60BBCDD51AA17BF6007ED21C /* MMTAppTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 60BBCDD41AA17BF6007ED21C /* MMTAppTests.m */; };
+		60BBCDE01AA1E279007ED21C /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 60BBCDDF1AA1E279007ED21C /* CoreData.framework */; };
+		60BBCDE51AA1E504007ED21C /* MMTLocationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 60BBCDE41AA1E504007ED21C /* MMTLocationManager.m */; };
+		60BBCDE71AA1E520007ED21C /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 60BBCDE61AA1E520007ED21C /* CoreLocation.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -28,20 +33,28 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		606140CB1AA27021008629AA /* CoreBluetooth.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreBluetooth.framework; path = System/Library/Frameworks/CoreBluetooth.framework; sourceTree = SDKROOT; };
+		606140CD1AA27143008629AA /* MMTBeacons.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MMTBeacons.h; sourceTree = "<group>"; };
+		606140CE1AA27143008629AA /* MMTBeacons.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MMTBeacons.m; sourceTree = "<group>"; };
 		60BBCDB21AA17BF6007ED21C /* MMTApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MMTApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		60BBCDB61AA17BF6007ED21C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		60BBCDB71AA17BF6007ED21C /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		60BBCDB91AA17BF6007ED21C /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		60BBCDBA1AA17BF6007ED21C /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		60BBCDBD1AA17BF6007ED21C /* MMTApp.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = MMTApp.xcdatamodel; sourceTree = "<group>"; };
-		60BBCDBF1AA17BF6007ED21C /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
-		60BBCDC01AA17BF6007ED21C /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
+		60BBCDBF1AA17BF6007ED21C /* MMTViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MMTViewController.h; sourceTree = "<group>"; };
+		60BBCDC01AA17BF6007ED21C /* MMTViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MMTViewController.m; sourceTree = "<group>"; };
 		60BBCDC31AA17BF6007ED21C /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		60BBCDC51AA17BF6007ED21C /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		60BBCDC81AA17BF6007ED21C /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
 		60BBCDCE1AA17BF6007ED21C /* MMTAppTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MMTAppTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		60BBCDD31AA17BF6007ED21C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		60BBCDD41AA17BF6007ED21C /* MMTAppTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MMTAppTests.m; sourceTree = "<group>"; };
+		60BBCDDF1AA1E279007ED21C /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
+		60BBCDE31AA1E504007ED21C /* MMTLocationManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MMTLocationManager.h; sourceTree = "<group>"; };
+		60BBCDE41AA1E504007ED21C /* MMTLocationManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MMTLocationManager.m; sourceTree = "<group>"; };
+		60BBCDE61AA1E520007ED21C /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
+		60BBCDE91AA1E657007ED21C /* MMTApp-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "MMTApp-Prefix.pch"; path = "Supporting Files/MMTApp-Prefix.pch"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -49,6 +62,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				606140CC1AA27021008629AA /* CoreBluetooth.framework in Frameworks */,
+				60BBCDE71AA1E520007ED21C /* CoreLocation.framework in Frameworks */,
+				60BBCDE01AA1E279007ED21C /* CoreData.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -66,6 +82,7 @@
 			isa = PBXGroup;
 			children = (
 				60BBCDB41AA17BF6007ED21C /* MMTApp */,
+				60BBCDDE1AA17DEA007ED21C /* Frameworks */,
 				60BBCDD11AA17BF6007ED21C /* MMTAppTests */,
 				60BBCDB31AA17BF6007ED21C /* Products */,
 			);
@@ -83,10 +100,10 @@
 		60BBCDB41AA17BF6007ED21C /* MMTApp */ = {
 			isa = PBXGroup;
 			children = (
+				60BBCDE21AA1E4CE007ED21C /* Controllers */,
+				60BBCDE11AA1E29F007ED21C /* Models */,
 				60BBCDB91AA17BF6007ED21C /* AppDelegate.h */,
 				60BBCDBA1AA17BF6007ED21C /* AppDelegate.m */,
-				60BBCDBF1AA17BF6007ED21C /* ViewController.h */,
-				60BBCDC01AA17BF6007ED21C /* ViewController.m */,
 				60BBCDC21AA17BF6007ED21C /* Main.storyboard */,
 				60BBCDC51AA17BF6007ED21C /* Images.xcassets */,
 				60BBCDC71AA17BF6007ED21C /* LaunchScreen.xib */,
@@ -101,6 +118,7 @@
 			children = (
 				60BBCDB61AA17BF6007ED21C /* Info.plist */,
 				60BBCDB71AA17BF6007ED21C /* main.m */,
+				60BBCDE91AA1E657007ED21C /* MMTApp-Prefix.pch */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -120,6 +138,36 @@
 				60BBCDD31AA17BF6007ED21C /* Info.plist */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		60BBCDDE1AA17DEA007ED21C /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				606140CB1AA27021008629AA /* CoreBluetooth.framework */,
+				60BBCDE61AA1E520007ED21C /* CoreLocation.framework */,
+				60BBCDDF1AA1E279007ED21C /* CoreData.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		60BBCDE11AA1E29F007ED21C /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				606140CD1AA27143008629AA /* MMTBeacons.h */,
+				606140CE1AA27143008629AA /* MMTBeacons.m */,
+			);
+			name = Models;
+			sourceTree = "<group>";
+		};
+		60BBCDE21AA1E4CE007ED21C /* Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				60BBCDBF1AA17BF6007ED21C /* MMTViewController.h */,
+				60BBCDC01AA17BF6007ED21C /* MMTViewController.m */,
+				60BBCDE31AA1E504007ED21C /* MMTLocationManager.h */,
+				60BBCDE41AA1E504007ED21C /* MMTLocationManager.m */,
+			);
+			name = Controllers;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -222,9 +270,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				606140CF1AA27143008629AA /* MMTBeacons.m in Sources */,
 				60BBCDBB1AA17BF6007ED21C /* AppDelegate.m in Sources */,
 				60BBCDBE1AA17BF6007ED21C /* MMTApp.xcdatamodeld in Sources */,
-				60BBCDC11AA17BF6007ED21C /* ViewController.m in Sources */,
+				60BBCDC11AA17BF6007ED21C /* MMTViewController.m in Sources */,
+				60BBCDE51AA1E504007ED21C /* MMTLocationManager.m in Sources */,
 				60BBCDB81AA17BF6007ED21C /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -349,6 +399,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				GCC_PREFIX_HEADER = "";
 				INFOPLIST_FILE = MMTApp/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -360,6 +411,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				GCC_PREFIX_HEADER = "";
 				INFOPLIST_FILE = MMTApp/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -420,6 +472,7 @@
 				60BBCDDA1AA17BF6007ED21C /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		60BBCDDB1AA17BF6007ED21C /* Build configuration list for PBXNativeTarget "MMTAppTests" */ = {
 			isa = XCConfigurationList;
@@ -428,6 +481,7 @@
 				60BBCDDD1AA17BF6007ED21C /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 
