@@ -28,15 +28,4 @@ NSString const *kUUIDMinorKey = @"minor";
     return self;
 }
 
-
-+ (MMTBeacons *)sharedInstance {
-    static MMTBeacons *instance = NULL;
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        instance = [[self alloc] init];
-        
-    });
-    return(instance);
-}
-
 @end

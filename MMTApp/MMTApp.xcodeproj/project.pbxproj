@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		606140CC1AA27021008629AA /* CoreBluetooth.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 606140CB1AA27021008629AA /* CoreBluetooth.framework */; };
 		606140CF1AA27143008629AA /* MMTBeacons.m in Sources */ = {isa = PBXBuildFile; fileRef = 606140CE1AA27143008629AA /* MMTBeacons.m */; };
+		606140D31AA2E0CB008629AA /* MMTNetworkManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 606140D21AA2E0CB008629AA /* MMTNetworkManager.m */; };
 		60BBCDB81AA17BF6007ED21C /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 60BBCDB71AA17BF6007ED21C /* main.m */; };
 		60BBCDBB1AA17BF6007ED21C /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 60BBCDBA1AA17BF6007ED21C /* AppDelegate.m */; };
 		60BBCDBE1AA17BF6007ED21C /* MMTApp.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 60BBCDBC1AA17BF6007ED21C /* MMTApp.xcdatamodeld */; };
@@ -36,6 +37,8 @@
 		606140CB1AA27021008629AA /* CoreBluetooth.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreBluetooth.framework; path = System/Library/Frameworks/CoreBluetooth.framework; sourceTree = SDKROOT; };
 		606140CD1AA27143008629AA /* MMTBeacons.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MMTBeacons.h; sourceTree = "<group>"; };
 		606140CE1AA27143008629AA /* MMTBeacons.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MMTBeacons.m; sourceTree = "<group>"; };
+		606140D11AA2E0CB008629AA /* MMTNetworkManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MMTNetworkManager.h; sourceTree = "<group>"; };
+		606140D21AA2E0CB008629AA /* MMTNetworkManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MMTNetworkManager.m; sourceTree = "<group>"; };
 		60BBCDB21AA17BF6007ED21C /* MMTApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MMTApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		60BBCDB61AA17BF6007ED21C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		60BBCDB71AA17BF6007ED21C /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -78,6 +81,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		606140D01AA2E097008629AA /* Managers */ = {
+			isa = PBXGroup;
+			children = (
+				606140D11AA2E0CB008629AA /* MMTNetworkManager.h */,
+				606140D21AA2E0CB008629AA /* MMTNetworkManager.m */,
+			);
+			name = Managers;
+			sourceTree = "<group>";
+		};
 		60BBCDA91AA17BF6007ED21C = {
 			isa = PBXGroup;
 			children = (
@@ -100,6 +112,7 @@
 		60BBCDB41AA17BF6007ED21C /* MMTApp */ = {
 			isa = PBXGroup;
 			children = (
+				606140D01AA2E097008629AA /* Managers */,
 				60BBCDE21AA1E4CE007ED21C /* Controllers */,
 				60BBCDE11AA1E29F007ED21C /* Models */,
 				60BBCDB91AA17BF6007ED21C /* AppDelegate.h */,
@@ -276,6 +289,7 @@
 				60BBCDC11AA17BF6007ED21C /* MMTViewController.m in Sources */,
 				60BBCDE51AA1E504007ED21C /* MMTLocationManager.m in Sources */,
 				60BBCDB81AA17BF6007ED21C /* main.m in Sources */,
+				606140D31AA2E0CB008629AA /* MMTNetworkManager.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

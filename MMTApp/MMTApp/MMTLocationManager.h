@@ -22,11 +22,9 @@ typedef enum {
 
 @interface MMTLocationManager : NSObject <CLLocationManagerDelegate>
 
-@property (nonatomic, strong) CLLocationManager     *locationManager;
-@property (nonatomic, strong) NSTimer               *locationTimer;
-@property (nonatomic, strong) CLLocation            *currentLocation;
-@property (nonatomic, strong) NSMutableDictionary   *rangedBeacons;
+@property (nonatomic, strong) NSMutableDictionary   *beacons;
 
 + (MMTLocationManager *)sharedInstance;
-
+- (void)startRanging;
+- (void)stopRanging;
 @end
