@@ -68,9 +68,10 @@ static NSString * const kNMApiUrl = @"https://s3.amazonaws.com/ibeacon-mock/%@/%
     [[_session downloadTaskWithURL:[NSURL URLWithString:album.coverArtURL]
                  completionHandler:^(NSURL *location, NSURLResponse *response, NSError *error) {
                      if(response && !error) {
-                        album.coverArtImage = [UIImage imageNamed:[location absoluteString]];
+                        UIImage *downloadedImage = [UIImage imageWithData:[NSData dataWithContentsOfURL:location]];
+                        album.coverArtImage.image = downloadedImage;
                         [self.results addObject:album];
-                         [self updateViewController];
+                        [self updateViewController];
                      }
                  }] resume];
 }

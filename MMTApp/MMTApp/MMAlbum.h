@@ -20,8 +20,8 @@ extern NSString *kMMAlbumUUID;
 
 @interface MMAlbum : NSObject
 
-@property (nonatomic, strong) NSString  *coverArtURL;
-@property (nonatomic, strong) UIImage   *coverArtImage;
+@property (nonatomic, strong) NSString      *coverArtURL;
+@property (nonatomic, strong) UIImageView   *coverArtImage;
 @property (nonatomic, strong) NSString  *title;
 @property (nonatomic, strong) NSString  *artist;
 @property (nonatomic) NSInteger         major;

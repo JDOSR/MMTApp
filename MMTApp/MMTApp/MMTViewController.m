@@ -45,6 +45,7 @@ static NSString * const kCLProximityAlertMsg = @"You are in proximity of beacon 
                                        CGRectGetHeight(screen)/2,
                                        15.0,
                                        15.0);
+    
     [_indicatorView setFrame:indicatorFrame];
     [self.view addSubview:_indicatorView];
     
@@ -68,6 +69,7 @@ static NSString * const kCLProximityAlertMsg = @"You are in proximity of beacon 
     [MMTLocationManager sharedInstance].viewController = self;
     _alertController = nil;
     [self registerViewControllerNotifications];
+    [self.tableView reloadData];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -185,9 +187,7 @@ static NSString * const kCLProximityAlertMsg = @"You are in proximity of beacon 
     cell.detailTextLabel.textColor = [UIColor darkGrayColor];
     cell.detailTextLabel.text = [NSString stringWithFormat:@"%@ - %@", album.artist, album.track];
     
-    if(album.coverArtImage == nil) {
-        cell.imageView.image = album.coverArtImage;
-    }
+    cell.imageView.image = album.coverArtImage.image;
 }
 
 
