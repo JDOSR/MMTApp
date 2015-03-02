@@ -1,5 +1,5 @@
 //
-//  MMTBeacons.h
+//  MMDevice.h
 //  MMTApp
 //
 //  Created by jasonowens on 2/28/15.
@@ -13,9 +13,9 @@ extern NSString *kUUIDKey;
 extern NSString *kUUIDMajorKey;
 extern NSString *kUUIDMinorKey;
 
-@interface MMTBeacons : NSObject
+@interface MMDevice : NSObject
 
 @property (nonatomic, strong, readonly) NSArray *supportedUUIDs;
 
-+ (MMTBeacons *)sharedInstance;
++ (MMDevice *)sharedInstance;
 @end

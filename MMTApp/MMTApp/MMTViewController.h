@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface MMTViewController : UIViewController
+@interface MMTViewController : UITableViewController
 
 
 @end

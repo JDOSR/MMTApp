@@ -1,12 +1,12 @@
 //
-//  MMTBeacons.m
+//  MMDevice.m
 //  MMTApp
 //
 //  Created by jasonowens on 2/28/15.
 //  Copyright (c) 2015 Jason Owens. All rights reserved.
 //
 
-#import "MMTBeacons.h"
+#import "MMDevice.h"
 
 NSString *uuid = @"B7499731-06DF-4D2B-9525-C5C790C73D69";
 
@@ -14,7 +14,7 @@ NSString const *kUUIDKey = @"uuid";
 NSString const *kUUIDMajorKey = @"major";
 NSString const *kUUIDMinorKey = @"minor";
 
-@implementation MMTBeacons
+@implementation MMDevice
 
 
 - (id)init {
@@ -28,4 +28,14 @@ NSString const *kUUIDMinorKey = @"minor";
     return self;
 }
 
+
++ (MMDevice *)sharedInstance {
+    static MMDevice *instance = NULL;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        instance = [[self alloc] init];
+        
+    });
+    return(instance);
+}
 @end

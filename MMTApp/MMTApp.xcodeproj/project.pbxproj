@@ -8,8 +8,9 @@
 
 /* Begin PBXBuildFile section */
 		606140CC1AA27021008629AA /* CoreBluetooth.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 606140CB1AA27021008629AA /* CoreBluetooth.framework */; };
-		606140CF1AA27143008629AA /* MMTBeacons.m in Sources */ = {isa = PBXBuildFile; fileRef = 606140CE1AA27143008629AA /* MMTBeacons.m */; };
+		606140CF1AA27143008629AA /* MMDevice.m in Sources */ = {isa = PBXBuildFile; fileRef = 606140CE1AA27143008629AA /* MMDevice.m */; };
 		606140D31AA2E0CB008629AA /* MMTNetworkManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 606140D21AA2E0CB008629AA /* MMTNetworkManager.m */; };
+		606140D61AA3C6E8008629AA /* MMAlbum.m in Sources */ = {isa = PBXBuildFile; fileRef = 606140D51AA3C6E8008629AA /* MMAlbum.m */; };
 		60BBCDB81AA17BF6007ED21C /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 60BBCDB71AA17BF6007ED21C /* main.m */; };
 		60BBCDBB1AA17BF6007ED21C /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 60BBCDBA1AA17BF6007ED21C /* AppDelegate.m */; };
 		60BBCDBE1AA17BF6007ED21C /* MMTApp.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 60BBCDBC1AA17BF6007ED21C /* MMTApp.xcdatamodeld */; };
@@ -35,10 +36,12 @@
 
 /* Begin PBXFileReference section */
 		606140CB1AA27021008629AA /* CoreBluetooth.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreBluetooth.framework; path = System/Library/Frameworks/CoreBluetooth.framework; sourceTree = SDKROOT; };
-		606140CD1AA27143008629AA /* MMTBeacons.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MMTBeacons.h; sourceTree = "<group>"; };
-		606140CE1AA27143008629AA /* MMTBeacons.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MMTBeacons.m; sourceTree = "<group>"; };
+		606140CD1AA27143008629AA /* MMDevice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MMDevice.h; sourceTree = "<group>"; };
+		606140CE1AA27143008629AA /* MMDevice.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MMDevice.m; sourceTree = "<group>"; };
 		606140D11AA2E0CB008629AA /* MMTNetworkManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MMTNetworkManager.h; sourceTree = "<group>"; };
 		606140D21AA2E0CB008629AA /* MMTNetworkManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MMTNetworkManager.m; sourceTree = "<group>"; };
+		606140D41AA3C6E8008629AA /* MMAlbum.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MMAlbum.h; sourceTree = "<group>"; };
+		606140D51AA3C6E8008629AA /* MMAlbum.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MMAlbum.m; sourceTree = "<group>"; };
 		60BBCDB21AA17BF6007ED21C /* MMTApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MMTApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		60BBCDB61AA17BF6007ED21C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		60BBCDB71AA17BF6007ED21C /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -166,8 +169,10 @@
 		60BBCDE11AA1E29F007ED21C /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				606140CD1AA27143008629AA /* MMTBeacons.h */,
-				606140CE1AA27143008629AA /* MMTBeacons.m */,
+				606140CD1AA27143008629AA /* MMDevice.h */,
+				606140CE1AA27143008629AA /* MMDevice.m */,
+				606140D41AA3C6E8008629AA /* MMAlbum.h */,
+				606140D51AA3C6E8008629AA /* MMAlbum.m */,
 			);
 			name = Models;
 			sourceTree = "<group>";
@@ -283,13 +288,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				606140CF1AA27143008629AA /* MMTBeacons.m in Sources */,
+				606140CF1AA27143008629AA /* MMDevice.m in Sources */,
 				60BBCDBB1AA17BF6007ED21C /* AppDelegate.m in Sources */,
 				60BBCDBE1AA17BF6007ED21C /* MMTApp.xcdatamodeld in Sources */,
 				60BBCDC11AA17BF6007ED21C /* MMTViewController.m in Sources */,
 				60BBCDE51AA1E504007ED21C /* MMTLocationManager.m in Sources */,
 				60BBCDB81AA17BF6007ED21C /* main.m in Sources */,
 				606140D31AA2E0CB008629AA /* MMTNetworkManager.m in Sources */,
+				606140D61AA3C6E8008629AA /* MMAlbum.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -7,7 +7,7 @@
 //
 
 #import "MMTLocationManager.h"
-#import "MMTBeacons.h"
+#import "MMDevice.h"
 
 static NSString * const kCLProximityPredicateFormat = @"proximity = %d";
 @interface MMTLocationManager()
@@ -46,9 +46,8 @@ static NSString * const kCLProximityPredicateFormat = @"proximity = %d";
 
 
 - (void)setupBeacons {
-    MMTBeacons *supportedBeacons = [[MMTBeacons alloc] init];
-    NSArray *beaconArray = supportedBeacons.supportedUUIDs;
-    [beaconArray enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+    NSArray *supportedBeacons = [MMDevice sharedInstance].supportedUUIDs;
+    [supportedBeacons enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
         if([obj isKindOfClass:[NSDictionary class]]) {
             NSDictionary *beacon = (NSDictionary*)obj;
             NSUUID *uuid = (NSUUID *)[beacon objectForKey:kUUIDKey];

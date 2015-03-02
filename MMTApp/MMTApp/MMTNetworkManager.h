@@ -10,4 +10,8 @@
 
 @interface MMTNetworkManager : NSObject
 
+@property (nonatomic, retain) NSMutableDictionary *results;
+
+
++ (MMTNetworkManager *)sharedInstance;
 @end
