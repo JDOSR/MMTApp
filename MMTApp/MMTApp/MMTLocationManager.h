@@ -7,22 +7,15 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <UIKit/UIKit.h>
 #import <CoreLocation/CoreLocation.h>
 
-
-typedef enum {
-    MMTLocationServiceStatusDisabled,
-    MMTLocationServiceStatusAuthorized,
-    MMTLocationServiceStatusRestricted,
-    MMTLocationServiceStatusDenied,
-    MMTLocationServiceStatusNotDetermined,
-    MMTLocationServiceStatusAuthorizedAlways,
-    MMTLocationServiceStatusAuthorizedWhenInUse,
-} MMTLocationStatus;
+#import "MMTViewController.h"
 
 @interface MMTLocationManager : NSObject <CLLocationManagerDelegate>
 
 @property (nonatomic, strong) NSMutableDictionary   *beacons;
+@property (nonatomic, strong) MMTViewController     *viewController;
 
 + (MMTLocationManager *)sharedInstance;
 - (void)startRanging;

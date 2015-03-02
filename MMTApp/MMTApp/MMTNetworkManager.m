@@ -14,7 +14,7 @@ static NSString * const kNMApiUrl = @"https://s3.amazonaws.com/ibeacon-mock/%@/%
 
 @interface MMTNetworkManager()
 
-@property (nonatomic, retain) NSURLSession *session;
+@property (nonatomic, strong) NSURLSession *session;
 
 @end
 
@@ -34,7 +34,7 @@ static NSString * const kNMApiUrl = @"https://s3.amazonaws.com/ibeacon-mock/%@/%
     self = [super init];
     if(self) {
         _session = [NSURLSession sharedSession];
-        self.results = [[NSMutableDictionary alloc] initWithCapacity:1];
+        self.results = [[NSMutableArray alloc] initWithCapacity:1];
         [self buildURLRequests];
     }
     return self;
@@ -64,10 +64,26 @@ static NSString * const kNMApiUrl = @"https://s3.amazonaws.com/ibeacon-mock/%@/%
     }] resume];
 }
 
--(void)loadData:(NSDictionary *)json {
+- (void)downloadImageForAlbum:(MMAlbum *)album {
+    [[_session downloadTaskWithURL:[NSURL URLWithString:album.coverArtURL]
+                 completionHandler:^(NSURL *location, NSURLResponse *response, NSError *error) {
+                     if(response && !error) {
+                        album.coverArtImage = [UIImage imageNamed:[location absoluteString]];
+                        [self.results addObject:album];
+                         [self updateViewController];
+                     }
+                 }] resume];
+}
+
+- (void)loadData:(NSDictionary *)json {
     MMAlbum *newAlbum = [MMAlbum createAlbumFromDictionary:json];
-    NSString *loc = [NSString stringWithFormat:@"%li", (long)[newAlbum minor]];
-    [self.results setObject:[newAlbum copy] forKey:loc];
+    [self downloadImageForAlbum:newAlbum];
+}
+
+- (void)updateViewController {
+    if([self.results count] == [[MMDevice sharedInstance].supportedUUIDs count]) {
+        [[NSNotificationCenter defaultCenter] postNotificationName:kDataTaskCompletionNotificationDidFinishLoading object:nil];
+    }
 }
 
 @end

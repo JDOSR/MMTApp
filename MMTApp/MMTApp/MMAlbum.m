@@ -44,6 +44,7 @@ NSString const *kMMAlbumUUID = @"uuid";
     albumContent.minor = [[json objectForKey:kMMAlbumMinor] integerValue];
     albumContent.track = [json objectForKey:kMMAlbumTrack];
     albumContent.uuid = [json objectForKey:kMMAlbumUUID];
+    albumContent.coverArtImage = nil;
     
     return albumContent;
     

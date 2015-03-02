@@ -10,6 +10,9 @@
 #import "MMDevice.h"
 
 static NSString * const kCLProximityPredicateFormat = @"proximity = %d";
+
+static int kSingleBeaconInArray = 1;
+
 @interface MMTLocationManager()
 
 @property (nonatomic, strong) CLLocationManager     *locationManager;
@@ -17,6 +20,7 @@ static NSString * const kCLProximityPredicateFormat = @"proximity = %d";
 @property (nonatomic, strong) CLLocation            *currentLocation;
 @property (nonatomic, strong) NSMutableDictionary   *rangedBeacons;
 @property (nonatomic, strong) NSArray               *proximityArray;
+@property (nonatomic, strong) UIAlertController     *alertController;
 
 
 @end
@@ -38,12 +42,11 @@ static NSString * const kCLProximityPredicateFormat = @"proximity = %d";
     if(self) {
         self.rangedBeacons = [[NSMutableDictionary alloc] init];
         self.proximityArray = @[@(CLProximityUnknown), @(CLProximityImmediate), @(CLProximityNear), @(CLProximityFar)];
+        _alertController = nil;
         [self setupBeacons];
     }
     return self;
 }
-
-
 
 - (void)setupBeacons {
     NSArray *supportedBeacons = [MMDevice sharedInstance].supportedUUIDs;
@@ -58,10 +61,30 @@ static NSString * const kCLProximityPredicateFormat = @"proximity = %d";
             self.rangedBeacons[region] = [NSArray array];
         }
     }];
-    
-    
 }
 
+- (BOOL)checkAllBeacons:(NSArray *)allBeacons inRange:(NSNumber *)range {
+    CLBeacon *currentBeacon;
+    BOOL shouldStopCheckingBeacons = NO;
+    NSArray *proximityBeacons = [allBeacons filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:kCLProximityPredicateFormat, [range intValue]]];
+    if([proximityBeacons count] > kSingleBeaconInArray) {
+        NSSortDescriptor *closest = [[NSSortDescriptor alloc] initWithKey:@"accuracy" ascending:YES];
+        NSArray *sortedBeacons = [proximityBeacons sortedArrayUsingDescriptors:[NSArray arrayWithObject:closest]];
+        CLBeacon *closestBeacon = (CLBeacon *)[sortedBeacons firstObject];
+        currentBeacon = closestBeacon;
+    } else if ([proximityBeacons count] == kSingleBeaconInArray) {
+        currentBeacon = (CLBeacon *)[proximityBeacons firstObject];
+    }
+    if(!currentBeacon) {
+        self.beacons[range] = currentBeacon;
+        if([self.viewController respondsToSelector:@selector(launchActionSheetWithBeacon:)]) {
+            [self.viewController launchActionSheetWithBeacon:currentBeacon];
+        }
+        shouldStopCheckingBeacons = YES;
+    }
+    
+    return shouldStopCheckingBeacons;
+}
 
 - (void)startRanging {
 
@@ -104,7 +127,6 @@ static NSString * const kCLProximityPredicateFormat = @"proximity = %d";
 
 #pragma mark - LocationManager Delegates
 
-- (void)locationManager:(CLLocationManager *)manager didStartMonitoringForRegion:(CLRegion *)region {}
 - (void)locationManager:(CLLocationManager *)manager didRangeBeacons:(NSArray *)beacons inRegion:(CLBeaconRegion *)region {
     self.rangedBeacons[region] = beacons;
     [self.beacons removeAllObjects];
@@ -119,15 +141,16 @@ static NSString * const kCLProximityPredicateFormat = @"proximity = %d";
     [self.proximityArray enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
         if([obj isKindOfClass:[NSNumber class]]) {
             NSNumber *range = (NSNumber*)obj;
-            NSArray *proximityBeacons = [allBeacons filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:kCLProximityPredicateFormat, [range intValue]]];
-            if([proximityBeacons count] > 0) {
-                self.beacons[range] = proximityBeacons;
+            if(![range isEqualToNumber:@(CLProximityUnknown)]) {
+                *stop = [self checkAllBeacons:allBeacons inRange:range];
             }
         }
     }];
     
     
 }
+
+- (void)locationManager:(CLLocationManager *)manager rangingBeaconsDidFailForRegion:(CLBeaconRegion *)region withError:(NSError *)error {}
 
 
 @end
