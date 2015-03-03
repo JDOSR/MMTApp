@@ -132,8 +132,6 @@ static int kSingleBeaconInArray = 1;
 
 - (void)locationManager:(CLLocationManager *)manager didRangeBeacons:(NSArray *)beacons inRegion:(CLBeaconRegion *)region {
     
-    NSLog(@"Beacons Available: %@ in region: %@", beacons, region);
-    
     self.rangedBeacons[region] = beacons;
     [self.beacons removeAllObjects];
     
