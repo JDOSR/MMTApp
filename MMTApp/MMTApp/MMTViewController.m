@@ -22,10 +22,6 @@ static NSString * const kCLProximityAlertMsg = @"New Region ID (%@*) with minor 
 @property (nonatomic, strong) UIAlertController         *alertController;
 @property (nonatomic, strong) UIView                    *animatedView;
 
-@property (nonatomic, strong) CLLocationManager         *locationManager;
-@property (nonatomic, strong) NSMutableDictionary       *rangedRegions;
-@property (nonatomic, strong) NSMutableDictionary       *beacons;
-
 @end
 
 @implementation MMTViewController
@@ -40,36 +36,9 @@ static NSString * const kCLProximityAlertMsg = @"New Region ID (%@*) with minor 
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    CGRect screen = [[UIScreen mainScreen] bounds];
-    
-    CGFloat posY = CGRectGetHeight(screen);
-    CGRect uiViewFrame = CGRectMake(0.0, posY, CGRectGetWidth(screen), posY * 0.5);
-    
-    _indicatorView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
-    CGRect indicatorFrame = CGRectMake(CGRectGetWidth(screen)/2,
-                                       CGRectGetHeight(screen)/2,
-                                       15.0,
-                                       15.0);
-    
-    [_indicatorView setFrame:indicatorFrame];
-    [self.view addSubview:_indicatorView];
-    
-    [_indicatorView setHidesWhenStopped:YES];
-    [_indicatorView startAnimating];
-
-    _animatedView = [[UIView alloc] initWithFrame:uiViewFrame];
-    _animatedView.backgroundColor = [UIColor blackColor];
-    
-    
-    CGRect tableViewFrame = CGRectMake(0.0, 20.0, CGRectGetWidth(screen), CGRectGetHeight(uiViewFrame));
-    self.tableView = [[UITableView alloc] initWithFrame:tableViewFrame];
-    self.tableView.delegate = self;
-    self.tableView.dataSource = self;
-    [_animatedView addSubview:self.tableView];
-
-    UIButton *closeButton = [self getCloseButton];
-    [_animatedView addSubview:closeButton];
-    [self.view addSubview:_animatedView];
+    CGRect frame = [[UIScreen mainScreen] bounds];
+    [self addIndicatorInView:frame];
+    [self addSlideView:frame];
 
     [MMTLocationManager sharedInstance].viewController = self;
     _alertController = nil;
@@ -78,15 +47,18 @@ static NSString * const kCLProximityAlertMsg = @"New Region ID (%@*) with minor 
     [self.tableView reloadData];
 }
 
+
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    [self.tableView reloadData];
 }
+
 
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
     [[MMTLocationManager sharedInstance] startRangingForBeacons];
+    [self.tableView reloadData];
 }
+
 
 - (void)viewDidDisappear:(BOOL)animated {
     [super viewDidDisappear:animated];
@@ -94,6 +66,40 @@ static NSString * const kCLProximityAlertMsg = @"New Region ID (%@*) with minor 
 }
 
 #pragma mark - Helper Methods
+
+- (void)addIndicatorInView:(CGRect)frame {
+    _indicatorView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+    CGRect indicatorFrame = CGRectMake(CGRectGetWidth(frame)/2,
+                                       CGRectGetHeight(frame)/2,
+                                       15.0,
+                                       15.0);
+    
+    [_indicatorView setFrame:indicatorFrame];
+    [self.view addSubview:_indicatorView];
+    
+    [_indicatorView setHidesWhenStopped:YES];
+    [_indicatorView startAnimating];
+    
+}
+
+- (void)addSlideView:(CGRect)frame {
+    CGFloat posY = CGRectGetHeight(frame);
+    CGRect uiViewFrame = CGRectMake(0.0, posY, CGRectGetWidth(frame), posY * 0.5);
+    _animatedView = [[UIView alloc] initWithFrame:uiViewFrame];
+    _animatedView.backgroundColor = [UIColor blackColor];
+    
+    
+    CGRect tableViewFrame = CGRectMake(0.0, 20.0, CGRectGetWidth(frame), CGRectGetHeight(uiViewFrame));
+    self.tableView = [[UITableView alloc] initWithFrame:tableViewFrame];
+    self.tableView.delegate = self;
+    self.tableView.dataSource = self;
+    [_animatedView addSubview:self.tableView];
+    
+    UIButton *closeButton = [self getCloseButton];
+    [_animatedView addSubview:closeButton];
+    [self.view addSubview:_animatedView];
+    
+}
 
 - (void)reloadView {
     [_indicatorView stopAnimating];
@@ -122,7 +128,9 @@ static NSString * const kCLProximityAlertMsg = @"New Region ID (%@*) with minor 
                          frame.origin.y = CGRectGetMinY(frame) * 0.5;
                          _animatedView.frame = frame;
                      }
-                     completion:nil];
+                     completion:^(BOOL done){
+                         [self.tableView reloadData];
+                     }];
 }
 
 - (void)closeTableView {
@@ -195,7 +203,7 @@ static NSString * const kCLProximityAlertMsg = @"New Region ID (%@*) with minor 
     cell.textLabel.font = [UIFont boldSystemFontOfSize:12.0];
     cell.textLabel.textAlignment = NSTextAlignmentLeft;
     cell.textLabel.textColor = [UIColor blackColor];
-    cell.textLabel.text = [NSString stringWithFormat:@"%@ (Minor: %li)", album.title, (long)album.minor];
+    cell.textLabel.text = [NSString stringWithFormat:@"%@ (Minor: %@)", album.title, album.minor];
     
     cell.detailTextLabel.font = [UIFont systemFontOfSize:8.0];
     cell.detailTextLabel.textAlignment = NSTextAlignmentLeft;

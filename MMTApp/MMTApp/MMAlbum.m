@@ -36,7 +36,7 @@ NSString const *kMMAlbumUUID = @"uuid";
     if([[json objectForKey:kMMAlbum] isKindOfClass:[NSDictionary class]]) {
         NSDictionary *album = [json objectForKey:kMMAlbum];
         albumContent.coverArtURL = [album objectForKey:kMMAlbumCoverArt];
-        albumContent.title = [album objectForKey:kMMAlbumTitle];
+        albumContent.title = [[album objectForKey:kMMAlbumTitle] stringByReplacingOccurrencesOfString:@"feat. " withString:@""];
     }
     
     albumContent.artist = [json objectForKey:kMMAlbumArtist];
@@ -48,6 +48,12 @@ NSString const *kMMAlbumUUID = @"uuid";
     
     return albumContent;
     
+}
+
++ (NSNumber *)convertToNumber:(NSString *)value {
+    NSNumberFormatter *format = [[NSNumberFormatter alloc] init];
+    format.numberStyle = NSNumberFormatterNoStyle;
+    return [format numberFromString:value];
 }
 
 @end

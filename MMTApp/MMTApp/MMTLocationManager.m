@@ -9,7 +9,7 @@
 #import "MMTLocationManager.h"
 #import "MMDevice.h"
 
-static NSString * const kCLProximityPredicateFormat = @"proximity = %d";
+static NSString * const kCLProximityPredicateFormat = @"(proximity = %d) AND (accuracy > -1)";
 static NSString * const kDeviceParameterKey = @"accuracy";
 static int kSingleBeaconInArray = 1;
 
@@ -58,10 +58,18 @@ static int kSingleBeaconInArray = 1;
         if([obj isKindOfClass:[NSDictionary class]]) {
             NSDictionary *beacon = (NSDictionary*)obj;
             NSUUID *uuid = (NSUUID *)[beacon objectForKey:kUUIDKey];
-//            CLBeaconMajorValue major = (CLBeaconMajorValue)[beacon objectForKey:kUUIDMajorKey];
-//            CLBeaconMinorValue minor = (CLBeaconMinorValue)[beacon objectForKey:kUUIDMinorKey];
-            CLBeaconRegion *region = [[CLBeaconRegion alloc] initWithProximityUUID:uuid
-                                                                        identifier:[uuid UUIDString]];
+            NSNumber *major = (NSNumber *)[beacon objectForKey:kUUIDMajorKey];
+            NSNumber *minor = (NSNumber *)[beacon objectForKey:kUUIDMinorKey];
+            CLBeaconRegion *region;
+            
+            if(major && minor) {
+                region = [[CLBeaconRegion alloc] initWithProximityUUID:uuid major:[major shortValue] minor:[minor shortValue] identifier:[uuid UUIDString]];
+            } else if(major && !minor) {
+                region = [[CLBeaconRegion alloc] initWithProximityUUID:uuid major:[major shortValue] identifier:[uuid UUIDString]];
+            } else if(!major && !minor) {
+                region = [[CLBeaconRegion alloc] initWithProximityUUID:uuid identifier:[uuid UUIDString]];
+            }
+            
             self.rangedBeacons[region] = [NSArray array];
         }
     }];
@@ -121,7 +129,6 @@ static int kSingleBeaconInArray = 1;
 #pragma mark - LocationManager Delegates
 
 - (void)locationManager:(CLLocationManager *)manager didRangeBeacons:(NSArray *)beacons inRegion:(CLBeaconRegion *)region {
-//    NSLog(@"didRangeBeacons:inRegion: %@", region);
     
     self.rangedBeacons[region] = beacons;
     [self.beacons removeAllObjects];
