@@ -40,8 +40,8 @@ NSString const *kMMAlbumUUID = @"uuid";
     }
     
     albumContent.artist = [json objectForKey:kMMAlbumArtist];
-    albumContent.major = [[json objectForKey:kMMAlbumMajor] integerValue];
-    albumContent.minor = [[json objectForKey:kMMAlbumMinor] integerValue];
+    albumContent.major = [json objectForKey:kMMAlbumMajor];
+    albumContent.minor = [json objectForKey:kMMAlbumMinor];
     albumContent.track = [json objectForKey:kMMAlbumTrack];
     albumContent.uuid = [json objectForKey:kMMAlbumUUID];
     albumContent.coverArtImage = [[UIImageView alloc] init];

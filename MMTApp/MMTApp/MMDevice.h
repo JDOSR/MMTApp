@@ -13,6 +13,9 @@ extern NSString *kUUIDKey;
 extern NSString *kUUIDMajorKey;
 extern NSString *kUUIDMinorKey;
 
+static NSString * const kDataTaskCompletionNotificationDidFinishLoading = @"kDataTaskCompletionNotificationDidFinishLoading";
+static NSString * const kVCLaunchDisplayForLocatedBeacon = @"kVCLaunchDisplayForLocatedBeacon";
+
 @interface MMDevice : NSObject
 
 @property (nonatomic, strong, readonly) NSArray *supportedUUIDs;

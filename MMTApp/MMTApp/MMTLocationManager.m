@@ -10,19 +10,11 @@
 #import "MMDevice.h"
 
 static NSString * const kCLProximityPredicateFormat = @"proximity = %d";
-
+static NSString * const kDeviceParameterKey = @"accuracy";
 static int kSingleBeaconInArray = 1;
 
 @interface MMTLocationManager()
-
-@property (nonatomic, strong) CLLocationManager     *locationManager;
-@property (nonatomic, strong) NSTimer               *locationTimer;
-@property (nonatomic, strong) CLLocation            *currentLocation;
-@property (nonatomic, strong) NSMutableDictionary   *rangedBeacons;
-@property (nonatomic, strong) NSArray               *proximityArray;
-@property (nonatomic, strong) UIAlertController     *alertController;
-
-
+@property (nonatomic, strong) CLBeacon *currentBeacon;
 @end
 
 @implementation MMTLocationManager
@@ -32,7 +24,6 @@ static int kSingleBeaconInArray = 1;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         instance = [[self alloc] init];
-        
     });
     return(instance);
 }
@@ -43,91 +34,95 @@ static int kSingleBeaconInArray = 1;
         self.rangedBeacons = [[NSMutableDictionary alloc] init];
         self.proximityArray = @[@(CLProximityUnknown), @(CLProximityImmediate), @(CLProximityNear), @(CLProximityFar)];
         _alertController = nil;
-        [self setupBeacons];
+        
+        [self setupLocationManager];
+        [self setupBeaconRegions];
     }
     return self;
 }
 
-- (void)setupBeacons {
+- (void)setupLocationManager {
+    self.locationManager = [[CLLocationManager alloc] init];
+    self.locationManager.delegate = self;
+    self.locationManager.distanceFilter = kCLDistanceFilterNone;
+    self.locationManager.desiredAccuracy = kCLLocationAccuracyBest;
+    if([self.locationManager respondsToSelector:@selector(requestAlwaysAuthorization)]) {
+        [self.locationManager requestAlwaysAuthorization];
+    }
+    
+}
+
+- (void)setupBeaconRegions {
     NSArray *supportedBeacons = [MMDevice sharedInstance].supportedUUIDs;
     [supportedBeacons enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
         if([obj isKindOfClass:[NSDictionary class]]) {
             NSDictionary *beacon = (NSDictionary*)obj;
             NSUUID *uuid = (NSUUID *)[beacon objectForKey:kUUIDKey];
+//            CLBeaconMajorValue major = (CLBeaconMajorValue)[beacon objectForKey:kUUIDMajorKey];
+//            CLBeaconMinorValue minor = (CLBeaconMinorValue)[beacon objectForKey:kUUIDMinorKey];
             CLBeaconRegion *region = [[CLBeaconRegion alloc] initWithProximityUUID:uuid
-                                                                             major:(UInt16)[beacon objectForKey:kUUIDMajorKey]
-                                                                             minor:(UInt16)[beacon objectForKey:kUUIDMinorKey]
                                                                         identifier:[uuid UUIDString]];
             self.rangedBeacons[region] = [NSArray array];
         }
     }];
 }
 
-- (BOOL)checkAllBeacons:(NSArray *)allBeacons inRange:(NSNumber *)range {
-    CLBeacon *currentBeacon;
-    BOOL shouldStopCheckingBeacons = NO;
+- (void)startRangingForBeacons {
+    
+    @synchronized(self.locationManager) {
+        [self.rangedBeacons enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
+            if([key isKindOfClass:[CLBeaconRegion class]]) {
+                CLBeaconRegion *beaconRegion = (CLBeaconRegion*)key;
+                [self.locationManager startRangingBeaconsInRegion:beaconRegion];
+            }
+        }];
+    }
+}
+
+- (void)stopRangingForBeacons {
+    @synchronized(self.locationManager) {
+        [self.rangedBeacons enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
+            if([key isKindOfClass:[CLBeaconRegion class]]) {
+                CLBeaconRegion *beaconRegion = (CLBeaconRegion*)key;
+                [self.locationManager stopRangingBeaconsInRegion:beaconRegion];
+            }
+        }];
+    }
+}
+
+
+#pragma mark - Helper Methods
+- (void)findClosetBeacon:(NSArray *)allBeacons inRange:(NSNumber *)range {
+    CLBeacon *closestBeacon;
     NSArray *proximityBeacons = [allBeacons filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:kCLProximityPredicateFormat, [range intValue]]];
     if([proximityBeacons count] > kSingleBeaconInArray) {
-        NSSortDescriptor *closest = [[NSSortDescriptor alloc] initWithKey:@"accuracy" ascending:YES];
+        NSSortDescriptor *closest = [[NSSortDescriptor alloc] initWithKey:kDeviceParameterKey ascending:YES];
         NSArray *sortedBeacons = [proximityBeacons sortedArrayUsingDescriptors:[NSArray arrayWithObject:closest]];
-        CLBeacon *closestBeacon = (CLBeacon *)[sortedBeacons firstObject];
-        currentBeacon = closestBeacon;
+        closestBeacon = (CLBeacon *)[sortedBeacons firstObject];
     } else if ([proximityBeacons count] == kSingleBeaconInArray) {
-        currentBeacon = (CLBeacon *)[proximityBeacons firstObject];
-    }
-    if(!currentBeacon) {
-        self.beacons[range] = currentBeacon;
-        if([self.viewController respondsToSelector:@selector(launchActionSheetWithBeacon:)]) {
-            [self.viewController launchActionSheetWithBeacon:currentBeacon];
-        }
-        shouldStopCheckingBeacons = YES;
+        closestBeacon = (CLBeacon *)[proximityBeacons firstObject];
     }
     
-    return shouldStopCheckingBeacons;
-}
-
-- (void)startRanging {
-
-    if(![self.locationTimer isValid]) {
-        self.locationTimer = [NSTimer scheduledTimerWithTimeInterval:30.0
-                                                              target:self
-                                                            selector:@selector(stopRanging)
-                                                            userInfo:nil
-                                                             repeats:NO];
-    }
-    
-    if(!self.locationManager) {
-        self.locationManager = [[CLLocationManager alloc] init];
-    }
-    
-    self.locationManager.distanceFilter = kCLDistanceFilterNone;
-    self.locationManager.desiredAccuracy = kCLLocationAccuracyBest;
-    
-    @synchronized(self.locationManager) {
-        self.locationManager.delegate = self;
-        [self.rangedBeacons enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
-            if([obj isKindOfClass:[CLBeaconRegion class]]) {
-                [self.locationManager startRangingBeaconsInRegion:(CLBeaconRegion*)obj];
-            }
-        }];
+    if (closestBeacon && ![self isCurrentBeacon:closestBeacon]) {
+        self.beacons[range] = closestBeacon;
+        _currentBeacon = closestBeacon;
+        [self displayAlertController];
     }
 }
 
+- (void)displayAlertController {
+    [[NSNotificationCenter defaultCenter] postNotificationName:kVCLaunchDisplayForLocatedBeacon object:_currentBeacon];
+}
 
-- (void)stopRanging {
-    @synchronized(self.locationManager) {
-        [self.rangedBeacons enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
-            if([obj isKindOfClass:[CLBeaconRegion class]]) {
-                [self.locationManager stopRangingBeaconsInRegion:(CLBeaconRegion*)obj];
-            }
-        }];
-    }
-    [self.locationTimer invalidate];
+- (BOOL)isCurrentBeacon:(CLBeacon *)closestBeacon {
+    return [[closestBeacon.proximityUUID UUIDString] isEqualToString:[_currentBeacon.proximityUUID UUIDString]];
 }
 
 #pragma mark - LocationManager Delegates
 
 - (void)locationManager:(CLLocationManager *)manager didRangeBeacons:(NSArray *)beacons inRegion:(CLBeaconRegion *)region {
+//    NSLog(@"didRangeBeacons:inRegion: %@", region);
+    
     self.rangedBeacons[region] = beacons;
     [self.beacons removeAllObjects];
     
@@ -141,16 +136,14 @@ static int kSingleBeaconInArray = 1;
     [self.proximityArray enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
         if([obj isKindOfClass:[NSNumber class]]) {
             NSNumber *range = (NSNumber*)obj;
-            if(![range isEqualToNumber:@(CLProximityUnknown)]) {
-                *stop = [self checkAllBeacons:allBeacons inRange:range];
-            }
+            [self findClosetBeacon:allBeacons inRange:range];
         }
     }];
-    
-    
 }
 
-- (void)locationManager:(CLLocationManager *)manager rangingBeaconsDidFailForRegion:(CLBeaconRegion *)region withError:(NSError *)error {}
+- (void)locationManager:(CLLocationManager *)manager rangingBeaconsDidFailForRegion:(CLBeaconRegion *)region withError:(NSError *)error {
+    NSLog(@"rangingBeaconsDidFailForRegion: %@", [error description]);
+}
 
 
 @end

@@ -17,14 +17,14 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     
-    [[MMTLocationManager sharedInstance] startRanging];
+    [MMTLocationManager sharedInstance];
     [MMTNetworkManager sharedInstance];
     
     return YES;
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application {
-    [[MMTLocationManager sharedInstance] stopRanging];
+    [[MMTLocationManager sharedInstance] stopRangingForBeacons];
 }
 
 @end

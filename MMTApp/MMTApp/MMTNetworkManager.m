@@ -82,7 +82,7 @@ static NSString * const kNMApiUrl = @"https://s3.amazonaws.com/ibeacon-mock/%@/%
 }
 
 - (void)updateViewController {
-    if([self.results count] == [[MMDevice sharedInstance].supportedUUIDs count]) {
+    if([self.results count] == ([[MMDevice sharedInstance].supportedUUIDs count]-1)) {
         [[NSNotificationCenter defaultCenter] postNotificationName:kDataTaskCompletionNotificationDidFinishLoading object:nil];
     }
 }

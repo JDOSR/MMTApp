@@ -8,9 +8,6 @@
 
 #import <Foundation/Foundation.h>
 
-static NSString * const kDataTaskCompletionNotificationDidFinishLoading = @"kDataTaskCompletionNotificationDidFinishLoading";
-
-
 @interface MMTNetworkManager : NSObject
 @property (nonatomic, retain) NSMutableArray *results;
 + (MMTNetworkManager *)sharedInstance;

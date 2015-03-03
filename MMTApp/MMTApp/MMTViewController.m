@@ -10,16 +10,21 @@
 #import "MMTNetworkManager.h"
 #import "MMTLocationManager.h"
 #import "MMAlbum.h"
+#import "MMDevice.h"
 
 static NSString * const cellIdentifier = @"MMTViewControllerIdentifier";
 static NSString * const kCLProximityAlertTitle = @"Beacon Found!";
-static NSString * const kCLProximityAlertMsg = @"You are in proximity of beacon with minor %li";
+static NSString * const kCLProximityAlertMsg = @"New Region ID (%@*) with minor %@";
 
-@interface MMTViewController ()
+@interface MMTViewController () <CLLocationManagerDelegate>
 
 @property (nonatomic, strong) UIActivityIndicatorView   *indicatorView;
 @property (nonatomic, strong) UIAlertController         *alertController;
 @property (nonatomic, strong) UIView                    *animatedView;
+
+@property (nonatomic, strong) CLLocationManager         *locationManager;
+@property (nonatomic, strong) NSMutableDictionary       *rangedRegions;
+@property (nonatomic, strong) NSMutableDictionary       *beacons;
 
 @end
 
@@ -28,7 +33,7 @@ static NSString * const kCLProximityAlertMsg = @"You are in proximity of beacon 
 
 - (void)dealloc {
     [self unregisterViewControllerNotifications];
-    [[MMTLocationManager sharedInstance] stopRanging];
+    [[MMTLocationManager sharedInstance] stopRangingForBeacons];
     [_indicatorView stopAnimating];
 }
 
@@ -68,6 +73,7 @@ static NSString * const kCLProximityAlertMsg = @"You are in proximity of beacon 
 
     [MMTLocationManager sharedInstance].viewController = self;
     _alertController = nil;
+    
     [self registerViewControllerNotifications];
     [self.tableView reloadData];
 }
@@ -79,12 +85,19 @@ static NSString * const kCLProximityAlertMsg = @"You are in proximity of beacon 
 
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
+    [[MMTLocationManager sharedInstance] startRangingForBeacons];
 }
+
+- (void)viewDidDisappear:(BOOL)animated {
+    [super viewDidDisappear:animated];
+    [[MMTLocationManager sharedInstance] stopRangingForBeacons];
+}
+
+#pragma mark - Helper Methods
 
 - (void)reloadView {
     [_indicatorView stopAnimating];
     self.results = [[MMTNetworkManager sharedInstance].results copy];
-    self.devices = [[MMTLocationManager sharedInstance].beacons copy];
     [self.tableView reloadData];
 
 }
@@ -122,32 +135,34 @@ static NSString * const kCLProximityAlertMsg = @"You are in proximity of beacon 
                      completion:nil];
 }
 
-- (void)launchActionSheetWithBeacon:(CLBeacon *)beacon {
-    _alertController = [UIAlertController alertControllerWithTitle:kCLProximityAlertTitle
-                                                           message:[NSString stringWithFormat:kCLProximityAlertMsg, (long)beacon.minor]
-                                                    preferredStyle:UIAlertControllerStyleAlert];
-    
-    UIAlertAction *cancel = [UIAlertAction actionWithTitle:NSLocalizedString(@"Cancel", @"Cancel Action")
-                                                     style:UIAlertActionStyleCancel
+- (void)launchActionSheetWithBeacon:(NSNotification *)notification {
+    if([[notification object] isKindOfClass:[CLBeacon class]]) {
+        CLBeacon *beacon = (CLBeacon *)[notification object];
+        NSString *uuid_prefix = [[[beacon.proximityUUID UUIDString] componentsSeparatedByString:@"-"] firstObject];
+        _alertController = [UIAlertController alertControllerWithTitle:kCLProximityAlertTitle
+                                                               message:[NSString stringWithFormat:kCLProximityAlertMsg, uuid_prefix, [beacon minor]]
+                                                        preferredStyle:UIAlertControllerStyleAlert];
+        
+        UIAlertAction *cancel = [UIAlertAction actionWithTitle:NSLocalizedString(@"Cancel", @"Cancel Action")
+                                                         style:UIAlertActionStyleCancel
+                                                       handler:^(UIAlertAction *action) {}];
+        
+        UIAlertAction *ok = [UIAlertAction actionWithTitle:NSLocalizedString(@"OK", @"OK Action")
+                                                     style:UIAlertActionStyleDefault
                                                    handler:^(UIAlertAction *action) {}];
-    
-    UIAlertAction *ok = [UIAlertAction actionWithTitle:NSLocalizedString(@"OK", @"OK Action")
-                                                 style:UIAlertActionStyleDefault
-                                               handler:^(UIAlertAction *action) {}];
-    [_alertController addAction:cancel];
-    [_alertController addAction:ok];
-    
-    [self presentViewController:_alertController animated:YES completion:nil];
+        [_alertController addAction:cancel];
+        [_alertController addAction:ok];
+        
+        [self presentViewController:_alertController animated:YES completion:nil];
+    }
     
 }
 
 #pragma - mark - Registering Observers
 
 - (void)registerViewControllerNotifications {
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(reloadView)
-                                                 name:kDataTaskCompletionNotificationDidFinishLoading
-                                               object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reloadView) name:kDataTaskCompletionNotificationDidFinishLoading object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(launchActionSheetWithBeacon:) name:kVCLaunchDisplayForLocatedBeacon object:nil];
 }
 
 - (void)unregisterViewControllerNotifications {
@@ -155,7 +170,7 @@ static NSString * const kCLProximityAlertMsg = @"You are in proximity of beacon 
 }
 
 
-#pragma mark - View Controller Delegates
+#pragma mark - UITableViewController Delegate Methods
 
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
@@ -195,6 +210,5 @@ static NSString * const kCLProximityAlertMsg = @"You are in proximity of beacon 
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
-
 
 @end

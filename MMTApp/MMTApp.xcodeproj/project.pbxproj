@@ -13,7 +13,6 @@
 		606140D61AA3C6E8008629AA /* MMAlbum.m in Sources */ = {isa = PBXBuildFile; fileRef = 606140D51AA3C6E8008629AA /* MMAlbum.m */; };
 		60BBCDB81AA17BF6007ED21C /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 60BBCDB71AA17BF6007ED21C /* main.m */; };
 		60BBCDBB1AA17BF6007ED21C /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 60BBCDBA1AA17BF6007ED21C /* AppDelegate.m */; };
-		60BBCDBE1AA17BF6007ED21C /* MMTApp.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 60BBCDBC1AA17BF6007ED21C /* MMTApp.xcdatamodeld */; };
 		60BBCDC11AA17BF6007ED21C /* MMTViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 60BBCDC01AA17BF6007ED21C /* MMTViewController.m */; };
 		60BBCDC41AA17BF6007ED21C /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 60BBCDC21AA17BF6007ED21C /* Main.storyboard */; };
 		60BBCDC61AA17BF6007ED21C /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 60BBCDC51AA17BF6007ED21C /* Images.xcassets */; };
@@ -22,6 +21,8 @@
 		60BBCDE01AA1E279007ED21C /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 60BBCDDF1AA1E279007ED21C /* CoreData.framework */; };
 		60BBCDE51AA1E504007ED21C /* MMTLocationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 60BBCDE41AA1E504007ED21C /* MMTLocationManager.m */; };
 		60BBCDE71AA1E520007ED21C /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 60BBCDE61AA1E520007ED21C /* CoreLocation.framework */; };
+		60DB130E1AA564C900E27568 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 60DB130D1AA564C900E27568 /* UIKit.framework */; };
+		60DB13101AA564D200E27568 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 60DB130F1AA564D200E27568 /* Foundation.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -47,7 +48,6 @@
 		60BBCDB71AA17BF6007ED21C /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		60BBCDB91AA17BF6007ED21C /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		60BBCDBA1AA17BF6007ED21C /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
-		60BBCDBD1AA17BF6007ED21C /* MMTApp.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = MMTApp.xcdatamodel; sourceTree = "<group>"; };
 		60BBCDBF1AA17BF6007ED21C /* MMTViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MMTViewController.h; sourceTree = "<group>"; };
 		60BBCDC01AA17BF6007ED21C /* MMTViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MMTViewController.m; sourceTree = "<group>"; };
 		60BBCDC31AA17BF6007ED21C /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -61,6 +61,8 @@
 		60BBCDE41AA1E504007ED21C /* MMTLocationManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MMTLocationManager.m; sourceTree = "<group>"; };
 		60BBCDE61AA1E520007ED21C /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		60BBCDE91AA1E657007ED21C /* MMTApp-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "MMTApp-Prefix.pch"; path = "Supporting Files/MMTApp-Prefix.pch"; sourceTree = "<group>"; };
+		60DB130D1AA564C900E27568 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
+		60DB130F1AA564D200E27568 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -68,6 +70,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				60DB13101AA564D200E27568 /* Foundation.framework in Frameworks */,
+				60DB130E1AA564C900E27568 /* UIKit.framework in Frameworks */,
 				606140CC1AA27021008629AA /* CoreBluetooth.framework in Frameworks */,
 				60BBCDE71AA1E520007ED21C /* CoreLocation.framework in Frameworks */,
 				60BBCDE01AA1E279007ED21C /* CoreData.framework in Frameworks */,
@@ -123,7 +127,6 @@
 				60BBCDC21AA17BF6007ED21C /* Main.storyboard */,
 				60BBCDC51AA17BF6007ED21C /* Images.xcassets */,
 				60BBCDC71AA17BF6007ED21C /* LaunchScreen.xib */,
-				60BBCDBC1AA17BF6007ED21C /* MMTApp.xcdatamodeld */,
 				60BBCDB51AA17BF6007ED21C /* Supporting Files */,
 			);
 			path = MMTApp;
@@ -159,6 +162,8 @@
 		60BBCDDE1AA17DEA007ED21C /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				60DB130F1AA564D200E27568 /* Foundation.framework */,
+				60DB130D1AA564C900E27568 /* UIKit.framework */,
 				606140CB1AA27021008629AA /* CoreBluetooth.framework */,
 				60BBCDE61AA1E520007ED21C /* CoreLocation.framework */,
 				60BBCDDF1AA1E279007ED21C /* CoreData.framework */,
@@ -237,6 +242,7 @@
 				TargetAttributes = {
 					60BBCDB11AA17BF6007ED21C = {
 						CreatedOnToolsVersion = 6.1.1;
+						DevelopmentTeam = 6T2K3YEWTX;
 					};
 					60BBCDCD1AA17BF6007ED21C = {
 						CreatedOnToolsVersion = 6.1.1;
@@ -290,7 +296,6 @@
 			files = (
 				606140CF1AA27143008629AA /* MMDevice.m in Sources */,
 				60BBCDBB1AA17BF6007ED21C /* AppDelegate.m in Sources */,
-				60BBCDBE1AA17BF6007ED21C /* MMTApp.xcdatamodeld in Sources */,
 				60BBCDC11AA17BF6007ED21C /* MMTViewController.m in Sources */,
 				60BBCDE51AA1E504007ED21C /* MMTLocationManager.m in Sources */,
 				60BBCDB81AA17BF6007ED21C /* main.m in Sources */,
@@ -419,8 +424,10 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				GCC_PREFIX_HEADER = "";
 				INFOPLIST_FILE = MMTApp/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = 1;
@@ -431,8 +438,10 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				GCC_PREFIX_HEADER = "";
 				INFOPLIST_FILE = MMTApp/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = 1;
@@ -504,19 +513,6 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
-
-/* Begin XCVersionGroup section */
-		60BBCDBC1AA17BF6007ED21C /* MMTApp.xcdatamodeld */ = {
-			isa = XCVersionGroup;
-			children = (
-				60BBCDBD1AA17BF6007ED21C /* MMTApp.xcdatamodel */,
-			);
-			currentVersion = 60BBCDBD1AA17BF6007ED21C /* MMTApp.xcdatamodel */;
-			path = MMTApp.xcdatamodeld;
-			sourceTree = "<group>";
-			versionGroupType = wrapper.xcdatamodel;
-		};
-/* End XCVersionGroup section */
 	};
 	rootObject = 60BBCDAA1AA17BF6007ED21C /* Project object */;
 }
