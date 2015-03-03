@@ -19,7 +19,6 @@ static NSString * const kCLProximityAlertMsg = @"New Region ID (%@*) with minor 
 @interface MMTViewController () <CLLocationManagerDelegate>
 
 @property (nonatomic, strong) UIActivityIndicatorView   *indicatorView;
-@property (nonatomic, strong) UIAlertController         *alertController;
 @property (nonatomic, strong) UIView                    *animatedView;
 
 @end
@@ -153,11 +152,15 @@ static NSString * const kCLProximityAlertMsg = @"New Region ID (%@*) with minor 
         
         UIAlertAction *cancel = [UIAlertAction actionWithTitle:NSLocalizedString(@"Cancel", @"Cancel Action")
                                                          style:UIAlertActionStyleCancel
-                                                       handler:^(UIAlertAction *action) {}];
+                                                       handler:^(UIAlertAction *action) {
+                                                           _alertController = nil;
+                                                       }];
         
         UIAlertAction *ok = [UIAlertAction actionWithTitle:NSLocalizedString(@"OK", @"OK Action")
                                                      style:UIAlertActionStyleDefault
-                                                   handler:^(UIAlertAction *action) {}];
+                                                   handler:^(UIAlertAction *action) {
+                                                       _alertController = nil;
+                                                   }];
         [_alertController addAction:cancel];
         [_alertController addAction:ok];
         

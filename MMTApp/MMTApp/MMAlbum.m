@@ -50,10 +50,4 @@ NSString const *kMMAlbumUUID = @"uuid";
     
 }
 
-+ (NSNumber *)convertToNumber:(NSString *)value {
-    NSNumberFormatter *format = [[NSNumberFormatter alloc] init];
-    format.numberStyle = NSNumberFormatterNoStyle;
-    return [format numberFromString:value];
-}
-
 @end

@@ -16,6 +16,7 @@
 @property (nonatomic, strong) UITableView   *tableView;
 @property (nonatomic, strong) IBOutlet UIButton *launchAlbumMenu;
 @property (nonatomic, strong) NSArray               *proximityArray;
+@property (nonatomic, strong) UIAlertController         *alertController;
 
 - (IBAction)launchTableViewWithResults:(id)sender;
 - (void)launchActionSheetWithBeacon:(CLBeacon *)beacon;

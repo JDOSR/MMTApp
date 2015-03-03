@@ -9,7 +9,7 @@
 #import "MMTLocationManager.h"
 #import "MMDevice.h"
 
-static NSString * const kCLProximityPredicateFormat = @"(proximity = %d) AND (accuracy > -1)";
+static NSString * const kCLProximityPredicateFormat = @"(proximity = %d) AND (proximity >= 0)";
 static NSString * const kDeviceParameterKey = @"accuracy";
 static int kSingleBeaconInArray = 1;
 
@@ -114,12 +114,14 @@ static int kSingleBeaconInArray = 1;
     if (closestBeacon && ![self isCurrentBeacon:closestBeacon]) {
         self.beacons[range] = closestBeacon;
         _currentBeacon = closestBeacon;
-        [self displayAlertController];
+        if(!self.viewController.alertController) {
+            [self displayAlertController];
+        }
     }
 }
 
 - (void)displayAlertController {
-    [[NSNotificationCenter defaultCenter] postNotificationName:kVCLaunchDisplayForLocatedBeacon object:_currentBeacon];
+    [[NSNotificationCenter defaultCenter] postNotificationName:kVCLaunchDisplayForLocatedBeacon object:[_currentBeacon copy]];
 }
 
 - (BOOL)isCurrentBeacon:(CLBeacon *)closestBeacon {
@@ -129,6 +131,8 @@ static int kSingleBeaconInArray = 1;
 #pragma mark - LocationManager Delegates
 
 - (void)locationManager:(CLLocationManager *)manager didRangeBeacons:(NSArray *)beacons inRegion:(CLBeaconRegion *)region {
+    
+    NSLog(@"Beacons Available: %@ in region: %@", beacons, region);
     
     self.rangedBeacons[region] = beacons;
     [self.beacons removeAllObjects];
