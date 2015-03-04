@@ -36,7 +36,6 @@ static int kSingleBeaconInArray = 1;
         _alertController = nil;
         
         [self setupLocationManager];
-        [self setupBeaconRegions];
     }
     return self;
 }
@@ -148,6 +147,13 @@ static int kSingleBeaconInArray = 1;
             [self findClosetBeacon:allBeacons inRange:range];
         }
     }];
+}
+
+
+-(void)locationManager:(CLLocationManager *)manager didChangeAuthorizationStatus:(CLAuthorizationStatus)status {
+    if(status == kCLAuthorizationStatusAuthorized) {
+        [self setupBeaconRegions];
+    }
 }
 
 - (void)locationManager:(CLLocationManager *)manager rangingBeaconsDidFailForRegion:(CLBeaconRegion *)region withError:(NSError *)error {
