@@ -9,14 +9,14 @@
 #import <UIKit/UIKit.h>
 @import CoreLocation;
 
-@interface MMTViewController : UIViewController <UITableViewDelegate, UITableViewDataSource>
+@interface MMTViewController : UIViewController
 
 @property (nonatomic, strong) NSDictionary  *devices;
 @property (nonatomic, strong) NSArray       *results;
-@property (nonatomic, strong) UITableView   *tableView;
 @property (nonatomic, strong) IBOutlet UIButton *launchAlbumMenu;
 @property (nonatomic, strong) NSArray               *proximityArray;
 @property (nonatomic, strong) UIAlertController         *alertController;
+@property (weak, nonatomic) IBOutlet UIButton *activateBtn;
 
 - (IBAction)launchTableViewWithResults:(id)sender;
 - (void)launchActionSheetWithBeacon:(CLBeacon *)beacon;

@@ -13,21 +13,21 @@ extern NSString *kMMAlbum;
 extern NSString *kMMAlbumCoverArt;
 extern NSString *kMMAlbumTitle;
 extern NSString *kMMAlbumArtist;
-extern NSString *kMMAlbumMajor;
-extern NSString *kMMAlbumMinor;
-extern NSString *kMMAlbumTrack;
-extern NSString *kMMAlbumUUID;
+extern NSString *kMMAlbumTrackID;
 
 @interface MMAlbum : NSObject
 
 @property (nonatomic, strong) NSString      *coverArtURL;
 @property (nonatomic, strong) NSString      *title;
+@property (nonatomic, strong) NSString      *album;
 @property (nonatomic, strong) NSString      *artist;
-@property (nonatomic, strong) NSNumber      *major;
-@property (nonatomic, strong) NSNumber      *minor;
-@property (nonatomic, strong) NSString      *track;
-@property (nonatomic, strong) NSString      *uuid;
+@property (nonatomic, strong) NSString      *albumDescription;
+@property (nonatomic, strong) NSString      *last_play_date;
+@property (nonatomic, strong) NSNumber      *duration;
+@property (nonatomic) NSInteger position;
+@property (nonatomic, strong) NSString      *trackId;
 @property (nonatomic, strong) UIImageView   *coverArtImage;
+
 
 +(MMAlbum *)createAlbumFromDictionary:(NSDictionary *)json;
 

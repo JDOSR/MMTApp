@@ -7,8 +7,12 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "MMPlaylist.h"
 
 @interface MMTNetworkManager : NSObject
-@property (nonatomic, retain) NSMutableArray *results;
+@property (nonatomic, retain) MMPlaylist *result;
 + (MMTNetworkManager *)sharedInstance;
+
+- (void)buildURLRequests;
+
 @end

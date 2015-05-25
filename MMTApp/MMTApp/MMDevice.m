@@ -25,11 +25,10 @@ NSString const *kUUIDMinorKey = @"minor";
 - (id)init {
     self = [super init];
     if(self) {
-        _supportedUUIDs = @[@{kUUIDKey : [[NSUUID alloc] initWithUUIDString:uuid], kUUIDMajorKey : @1000, kUUIDMinorKey : @1},
+        _supportedUUIDs = @[/*@{kUUIDKey : [[NSUUID alloc] initWithUUIDString:uuid], kUUIDMajorKey : @1000, kUUIDMinorKey : @1},
                             @{kUUIDKey : [[NSUUID alloc] initWithUUIDString:uuid], kUUIDMajorKey : @1000, kUUIDMinorKey : @2},
-                            @{kUUIDKey : [[NSUUID alloc] initWithUUIDString:uuid], kUUIDMajorKey : @1000, kUUIDMinorKey : @3}];
-                            /*@{kUUIDKey : [[NSUUID alloc] initWithUUIDString:test1UUID]},
-                            @{kUUIDKey : [[NSUUID alloc] initWithUUIDString:test2UUID]}];*/
+                            @{kUUIDKey : [[NSUUID alloc] initWithUUIDString:uuid], kUUIDMajorKey : @1000, kUUIDMinorKey : @3}];*/
+                            @{kUUIDKey : [[NSUUID alloc] initWithUUIDString:test1UUID], kUUIDMajorKey : @0, kUUIDMinorKey : @0}];
     }
     
     return self;

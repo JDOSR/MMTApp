@@ -11,8 +11,11 @@
 #import "MMTLocationManager.h"
 #import "MMAlbum.h"
 #import "MMDevice.h"
+#import "DetailView.h"
+#import "PlaylistTableViewController.h"
 
 static NSString * const cellIdentifier = @"MMTViewControllerIdentifier";
+static NSString * const kLocationText = @"Thank you for visiting our 233 W Jackson Blvd location. Would you like to view the current playlist?";
 static NSString * const kCLProximityAlertTitle = @"Beacon Found!";
 static NSString * const kCLProximityAlertMsg = @"New Region ID (%@*) with minor %@";
 
@@ -25,6 +28,29 @@ static NSString * const kCLProximityAlertMsg = @"New Region ID (%@*) with minor 
 
 @implementation MMTViewController
 
+#pragma - mark - Registering Observers
+
+- (void)registerViewControllerNotifications {
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(reloadView)
+                                                 name:kDataTaskCompletionNotificationDidFinishLoading
+                                               object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(launchTableViewWithResults:)
+                                                 name:kVCLaunchDisplayForLocatedBeacon
+                                               object:nil];
+}
+
+- (void)unregisterViewControllerNotifications {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
+- (void)didReceiveMemoryWarning {
+    [super didReceiveMemoryWarning];
+    // Dispose of any resources that can be recreated.
+}
+
+
 
 - (void)dealloc {
     [self unregisterViewControllerNotifications];
@@ -34,28 +60,24 @@ static NSString * const kCLProximityAlertMsg = @"New Region ID (%@*) with minor 
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
-    CGRect frame = [[UIScreen mainScreen] bounds];
-    [self addIndicatorInView:frame];
-    [self addSlideView:frame];
 
-    [MMTLocationManager sharedInstance].viewController = self;
+//    [MMTLocationManager sharedInstance].viewController = self;
     _alertController = nil;
     
     [self registerViewControllerNotifications];
-    [self.tableView reloadData];
+    [MMTLocationManager sharedInstance];
 }
 
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
+    
 }
 
 
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
     [[MMTLocationManager sharedInstance] startRangingForBeacons];
-    [self.tableView reloadData];
 }
 
 
@@ -86,60 +108,49 @@ static NSString * const kCLProximityAlertMsg = @"New Region ID (%@*) with minor 
     CGRect uiViewFrame = CGRectMake(0.0, posY, CGRectGetWidth(frame), posY * 0.5);
     _animatedView = [[UIView alloc] initWithFrame:uiViewFrame];
     _animatedView.backgroundColor = [UIColor blackColor];
-    
-    
-    CGRect tableViewFrame = CGRectMake(0.0, 20.0, CGRectGetWidth(frame), CGRectGetHeight(uiViewFrame));
-    self.tableView = [[UITableView alloc] initWithFrame:tableViewFrame];
-    self.tableView.delegate = self;
-    self.tableView.dataSource = self;
-    [_animatedView addSubview:self.tableView];
-    
-    UIButton *closeButton = [self getCloseButton];
-    [_animatedView addSubview:closeButton];
     [self.view addSubview:_animatedView];
     
 }
 
 - (void)reloadView {
     [_indicatorView stopAnimating];
-    self.results = [[MMTNetworkManager sharedInstance].results copy];
-    [self.tableView reloadData];
+//    self.results = [[MMTNetworkManager sharedInstance].results copy];
 
-}
-
-- (UIButton *)getCloseButton {
-    UIButton *button = [[UIButton alloc] initWithFrame:CGRectMake(0.0, 2.0, CGRectGetWidth([[UIScreen mainScreen] bounds]), 20.0)];
-    [button setTitleColor:[UIColor colorWithRed:(255/255.0) green:(255/255.0) blue:(255/255.0) alpha:1.0] forState:UIControlStateNormal];
-    [button setTitleColor:[UIColor whiteColor] forState:UIControlStateHighlighted];
-    [button setBackgroundColor:[UIColor colorWithRed:(0/255.0) green:(118/255.0) blue:(182/255.0) alpha:1.0]];
-    [button setTitle:@"Close" forState:UIControlStateNormal];
-    button.titleLabel.font = [UIFont systemFontOfSize:12.0];
-    [button addTarget:self action:@selector(closeTableView) forControlEvents:UIControlEventAllTouchEvents];
-    
-    return button;
-    
 }
 
 - (IBAction)launchTableViewWithResults:(id)sender {
-    [UIView animateWithDuration:0.5
-                     animations:^{
-                         CGRect frame = _animatedView.frame;
-                         frame.origin.y = CGRectGetMinY(frame) * 0.5;
-                         _animatedView.frame = frame;
-                     }
-                     completion:^(BOOL done){
-                         [self.tableView reloadData];
-                     }];
+    [[MMTNetworkManager sharedInstance] buildURLRequests];
+    _alertController = [UIAlertController alertControllerWithTitle:@"Welcome to McDonalds!"
+                                                           message:kLocationText
+                                                    preferredStyle:UIAlertControllerStyleAlert];
+    
+    UIAlertAction *cancel = [UIAlertAction actionWithTitle:NSLocalizedString(@"Cancel", @"Cancel Action")
+                                                     style:UIAlertActionStyleCancel
+                                                   handler:^(UIAlertAction *action) {
+                                                       _alertController = nil;
+                                                   }];
+    
+    UIAlertAction *yes = [UIAlertAction actionWithTitle:NSLocalizedString(@"View Playlist", @"View Playlist")
+                                                 style:UIAlertActionStyleDefault
+                                               handler:^(UIAlertAction *action) {
+                                                   [self launchPlaylist];
+                                               }];
+    [_alertController addAction:yes];
+    [_alertController addAction:cancel];
+    
+    [self presentViewController:_alertController animated:YES completion:^ {
+    }];
 }
 
-- (void)closeTableView {
-    [UIView animateWithDuration:0.5
-                     animations:^{
-                         CGRect frame = _animatedView.frame;
-                         frame.origin.y = CGRectGetMaxY(frame);
-                         _animatedView.frame = frame;
-                     }
-                     completion:nil];
+- (void)launchPlaylist {
+    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
+    PlaylistTableViewController *playlistTableViewController = (PlaylistTableViewController *)[storyboard instantiateViewControllerWithIdentifier:@"PlaylistViewController"];
+//    PlaylistTableViewController *playlistTableViewController = [[PlaylistTableViewController alloc] init];
+    MMPlaylist *playlist = (MMPlaylist *)[[MMTNetworkManager sharedInstance] result];
+    playlistTableViewController.results = [playlist.songs copy];
+    
+    UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:playlistTableViewController];
+    [self presentViewController:navController animated:YES completion:nil];
 }
 
 - (void)launchActionSheetWithBeacon:(NSNotification *)notification {
@@ -167,59 +178,6 @@ static NSString * const kCLProximityAlertMsg = @"New Region ID (%@*) with minor 
         [self presentViewController:_alertController animated:YES completion:nil];
     }
     
-}
-
-#pragma - mark - Registering Observers
-
-- (void)registerViewControllerNotifications {
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reloadView) name:kDataTaskCompletionNotificationDidFinishLoading object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(launchActionSheetWithBeacon:) name:kVCLaunchDisplayForLocatedBeacon object:nil];
-}
-
-- (void)unregisterViewControllerNotifications {
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
-}
-
-
-#pragma mark - UITableViewController Delegate Methods
-
-
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return [self.results count];
-}
-
-
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    
-    UITableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:cellIdentifier];
-    if(!cell) {
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:cellIdentifier];
-    }
-    [self configureCell:cell atIndexPath:indexPath];
-    return cell;
-}
-
-
-- (void)configureCell:(UITableViewCell *)cell atIndexPath:(NSIndexPath *)path {
-    MMAlbum *album = [self.results objectAtIndex:path.row];
-    
-    cell.textLabel.font = [UIFont boldSystemFontOfSize:12.0];
-    cell.textLabel.textAlignment = NSTextAlignmentLeft;
-    cell.textLabel.textColor = [UIColor blackColor];
-    cell.textLabel.text = [NSString stringWithFormat:@"%@ (Minor: %@)", album.title, album.minor];
-    
-    cell.detailTextLabel.font = [UIFont systemFontOfSize:8.0];
-    cell.detailTextLabel.textAlignment = NSTextAlignmentLeft;
-    cell.detailTextLabel.textColor = [UIColor darkGrayColor];
-    cell.detailTextLabel.text = [NSString stringWithFormat:@"%@ - %@", album.artist, album.track];
-    
-    cell.imageView.image = album.coverArtImage.image;
-}
-
-
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
 }
 
 @end

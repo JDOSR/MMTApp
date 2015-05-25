@@ -23,6 +23,12 @@
 		60BBCDE71AA1E520007ED21C /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 60BBCDE61AA1E520007ED21C /* CoreLocation.framework */; };
 		60DB130E1AA564C900E27568 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 60DB130D1AA564C900E27568 /* UIKit.framework */; };
 		60DB13101AA564D200E27568 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 60DB130F1AA564D200E27568 /* Foundation.framework */; };
+		766371EC1B117CCF0037261A /* PlaylistTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 766371EB1B117CCF0037261A /* PlaylistTableViewController.m */; };
+		766371EF1B117D120037261A /* SelectionDetailTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 766371EE1B117D120037261A /* SelectionDetailTableViewController.m */; };
+		766371F31B1190980037261A /* DetailView.m in Sources */ = {isa = PBXBuildFile; fileRef = 766371F11B1190980037261A /* DetailView.m */; };
+		766371F41B1190980037261A /* DetailView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 766371F21B1190980037261A /* DetailView.xib */; };
+		766371F71B12D4880037261A /* MMPlaylist.m in Sources */ = {isa = PBXBuildFile; fileRef = 766371F61B12D4880037261A /* MMPlaylist.m */; };
+		76C8660C1B13AB38000D1D9C /* CustomSelectionTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 76C8660B1B13AB38000D1D9C /* CustomSelectionTableViewCell.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -63,6 +69,17 @@
 		60BBCDE91AA1E657007ED21C /* MMTApp-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "MMTApp-Prefix.pch"; path = "Supporting Files/MMTApp-Prefix.pch"; sourceTree = "<group>"; };
 		60DB130D1AA564C900E27568 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		60DB130F1AA564D200E27568 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		766371EA1B117CCF0037261A /* PlaylistTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PlaylistTableViewController.h; sourceTree = "<group>"; };
+		766371EB1B117CCF0037261A /* PlaylistTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PlaylistTableViewController.m; sourceTree = "<group>"; };
+		766371ED1B117D120037261A /* SelectionDetailTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SelectionDetailTableViewController.h; sourceTree = "<group>"; };
+		766371EE1B117D120037261A /* SelectionDetailTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SelectionDetailTableViewController.m; sourceTree = "<group>"; };
+		766371F01B1190980037261A /* DetailView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DetailView.h; sourceTree = "<group>"; };
+		766371F11B1190980037261A /* DetailView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DetailView.m; sourceTree = "<group>"; };
+		766371F21B1190980037261A /* DetailView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = DetailView.xib; sourceTree = "<group>"; };
+		766371F51B12D4880037261A /* MMPlaylist.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MMPlaylist.h; sourceTree = "<group>"; };
+		766371F61B12D4880037261A /* MMPlaylist.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MMPlaylist.m; sourceTree = "<group>"; };
+		76C8660A1B13AB38000D1D9C /* CustomSelectionTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CustomSelectionTableViewCell.h; sourceTree = "<group>"; };
+		76C8660B1B13AB38000D1D9C /* CustomSelectionTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CustomSelectionTableViewCell.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -119,6 +136,7 @@
 		60BBCDB41AA17BF6007ED21C /* MMTApp */ = {
 			isa = PBXGroup;
 			children = (
+				76C866091B13AAE8000D1D9C /* CustomCells */,
 				606140D01AA2E097008629AA /* Managers */,
 				60BBCDE21AA1E4CE007ED21C /* Controllers */,
 				60BBCDE11AA1E29F007ED21C /* Models */,
@@ -178,6 +196,8 @@
 				606140CE1AA27143008629AA /* MMDevice.m */,
 				606140D41AA3C6E8008629AA /* MMAlbum.h */,
 				606140D51AA3C6E8008629AA /* MMAlbum.m */,
+				766371F51B12D4880037261A /* MMPlaylist.h */,
+				766371F61B12D4880037261A /* MMPlaylist.m */,
 			);
 			name = Models;
 			sourceTree = "<group>";
@@ -189,8 +209,24 @@
 				60BBCDC01AA17BF6007ED21C /* MMTViewController.m */,
 				60BBCDE31AA1E504007ED21C /* MMTLocationManager.h */,
 				60BBCDE41AA1E504007ED21C /* MMTLocationManager.m */,
+				766371EA1B117CCF0037261A /* PlaylistTableViewController.h */,
+				766371EB1B117CCF0037261A /* PlaylistTableViewController.m */,
+				766371ED1B117D120037261A /* SelectionDetailTableViewController.h */,
+				766371EE1B117D120037261A /* SelectionDetailTableViewController.m */,
+				766371F01B1190980037261A /* DetailView.h */,
+				766371F11B1190980037261A /* DetailView.m */,
+				766371F21B1190980037261A /* DetailView.xib */,
 			);
 			name = Controllers;
+			sourceTree = "<group>";
+		};
+		76C866091B13AAE8000D1D9C /* CustomCells */ = {
+			isa = PBXGroup;
+			children = (
+				76C8660A1B13AB38000D1D9C /* CustomSelectionTableViewCell.h */,
+				76C8660B1B13AB38000D1D9C /* CustomSelectionTableViewCell.m */,
+			);
+			name = CustomCells;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -277,6 +313,7 @@
 				60BBCDC41AA17BF6007ED21C /* Main.storyboard in Resources */,
 				60BBCDC91AA17BF6007ED21C /* LaunchScreen.xib in Resources */,
 				60BBCDC61AA17BF6007ED21C /* Images.xcassets in Resources */,
+				766371F41B1190980037261A /* DetailView.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -295,11 +332,16 @@
 			buildActionMask = 2147483647;
 			files = (
 				606140CF1AA27143008629AA /* MMDevice.m in Sources */,
+				76C8660C1B13AB38000D1D9C /* CustomSelectionTableViewCell.m in Sources */,
+				766371EC1B117CCF0037261A /* PlaylistTableViewController.m in Sources */,
 				60BBCDBB1AA17BF6007ED21C /* AppDelegate.m in Sources */,
 				60BBCDC11AA17BF6007ED21C /* MMTViewController.m in Sources */,
 				60BBCDE51AA1E504007ED21C /* MMTLocationManager.m in Sources */,
+				766371F31B1190980037261A /* DetailView.m in Sources */,
 				60BBCDB81AA17BF6007ED21C /* main.m in Sources */,
+				766371EF1B117D120037261A /* SelectionDetailTableViewController.m in Sources */,
 				606140D31AA2E0CB008629AA /* MMTNetworkManager.m in Sources */,
+				766371F71B12D4880037261A /* MMPlaylist.m in Sources */,
 				606140D61AA3C6E8008629AA /* MMAlbum.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

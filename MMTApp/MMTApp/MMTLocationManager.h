@@ -20,6 +20,7 @@
 @property (nonatomic, strong) NSMutableDictionary   *rangedBeacons;
 @property (nonatomic, strong) NSArray               *proximityArray;
 @property (nonatomic, strong) UIAlertController     *alertController;
+@property (nonatomic, strong) CLBeaconRegion        *rangedBeacon;
 
 @property (nonatomic, strong) NSMutableDictionary   *beacons;
 @property (nonatomic, strong) MMTViewController     *viewController;

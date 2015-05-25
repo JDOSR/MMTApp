@@ -8,14 +8,16 @@
 
 #import "MMAlbum.h"
 
-NSString const *kMMAlbum = @"album";
+NSString const *kMMAlbum = @"album_name";
 NSString const *kMMAlbumCoverArt = @"cover_art";
 NSString const *kMMAlbumTitle = @"title";
-NSString const *kMMAlbumArtist = @"artist";
-NSString const *kMMAlbumMajor = @"major";
-NSString const *kMMAlbumMinor = @"minor";
-NSString const *kMMAlbumTrack = @"track";
-NSString const *kMMAlbumUUID = @"uuid";
+NSString const *kMMSDuration = @"duration";
+NSString const *kMMAlbumArtist = @"artist_name";
+NSString const *kMMAlbumPosition = @"position";
+NSString const *kMMAlbumDescription = @"description";
+NSString const *kMMAlbumLastPlayed = @"last_play_date";
+NSString const *kMMAlbumTrackID = @"id";
+
 
 @interface MMAlbum()
 @end
@@ -33,19 +35,19 @@ NSString const *kMMAlbumUUID = @"uuid";
 +(MMAlbum *)createAlbumFromDictionary:(NSDictionary *)json {
 
     MMAlbum *albumContent = [[MMAlbum alloc] init];
-    if([[json objectForKey:kMMAlbum] isKindOfClass:[NSDictionary class]]) {
-        NSDictionary *album = [json objectForKey:kMMAlbum];
-        albumContent.coverArtURL = [album objectForKey:kMMAlbumCoverArt];
-        albumContent.title = [[album objectForKey:kMMAlbumTitle] stringByReplacingOccurrencesOfString:@"feat. " withString:@""];
+    if([json isKindOfClass:[NSDictionary class]]) {
+        albumContent.trackId = [json objectForKey:kMMAlbumTrackID];
+        albumContent.title = [json objectForKey:kMMAlbumTitle];
+        albumContent.duration = [json objectForKey:kMMSDuration];
+        albumContent.artist = [json objectForKey:kMMAlbumArtist];
+        albumContent.album = [json objectForKey:kMMAlbum];
+        albumContent.coverArtURL = [json objectForKey:kMMAlbumCoverArt];
+        albumContent.position = [[json objectForKey:kMMAlbumPosition] integerValue];
+        albumContent.albumDescription = [json objectForKey:kMMAlbumDescription];
+        albumContent.last_play_date = [json objectForKey:kMMAlbumLastPlayed];
+        //
+        albumContent.coverArtImage = [[UIImageView alloc] init];
     }
-    
-    albumContent.artist = [json objectForKey:kMMAlbumArtist];
-    albumContent.major = [json objectForKey:kMMAlbumMajor];
-    albumContent.minor = [json objectForKey:kMMAlbumMinor];
-    albumContent.track = [json objectForKey:kMMAlbumTrack];
-    albumContent.uuid = [json objectForKey:kMMAlbumUUID];
-    albumContent.coverArtImage = [[UIImageView alloc] init];
-    
     return albumContent;
     
 }

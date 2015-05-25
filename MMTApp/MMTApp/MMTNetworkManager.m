@@ -10,7 +10,9 @@
 #import "MMDevice.h"
 #import "MMAlbum.h"
 
-static NSString * const kNMApiUrl = @"https://s3.amazonaws.com/ibeacon-mock/%@/%@/%@.json";
+static NSString * const kMMDataPlaylistURL = @"https://onlinedj.moodmedia.com/api/v1/playlists/16405.json";
+static NSString * const kNMPOSTUrl = @" https://onlinedj.moodmedia.com/api/v1/playlists/16405/votes.json";
+//{ "song_id": 156558}
 
 @interface MMTNetworkManager()
 
@@ -34,24 +36,14 @@ static NSString * const kNMApiUrl = @"https://s3.amazonaws.com/ibeacon-mock/%@/%
     self = [super init];
     if(self) {
         _session = [NSURLSession sharedSession];
-        self.results = [[NSMutableArray alloc] initWithCapacity:1];
-        [self buildURLRequests];
     }
     return self;
 }
 
 
 - (void)buildURLRequests {
-    [self.results removeAllObjects];
-    [[MMDevice sharedInstance].supportedUUIDs enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-        if([obj isKindOfClass:[NSDictionary class]]) {
-            NSUUID *uuid = (NSUUID *)[(NSDictionary *)obj objectForKey:kUUIDKey];
-            NSString *url = [NSString stringWithFormat:kNMApiUrl, [uuid UUIDString],
-                             (NSString *)[(NSDictionary *)obj objectForKey:kUUIDMajorKey],
-                             (NSString *)[(NSDictionary *)obj objectForKey:kUUIDMinorKey]];
-            [self getDataFromURL:url];
-        }
-    }];
+    self.result = nil;
+    [self getDataFromURL:kMMDataPlaylistURL];
 }
 
 - (void)getDataFromURL:(NSString *)url {
@@ -68,23 +60,34 @@ static NSString * const kNMApiUrl = @"https://s3.amazonaws.com/ibeacon-mock/%@/%
     [[_session downloadTaskWithURL:[NSURL URLWithString:album.coverArtURL]
                  completionHandler:^(NSURL *location, NSURLResponse *response, NSError *error) {
                      if(response && !error) {
-                        UIImage *downloadedImage = [UIImage imageWithData:[NSData dataWithContentsOfURL:location]];
-                        album.coverArtImage.image = downloadedImage;
-                        [self.results addObject:album];
-                        [self updateViewController];
+                         UIImage *coverImage = [UIImage imageWithData:[NSData dataWithContentsOfURL:location]];
+                         if(coverImage) {
+                             [album.coverArtImage setImage:coverImage];
+                         }
+//                        [self updateViewController];
                      }
                  }] resume];
 }
 
 - (void)loadData:(NSDictionary *)json {
-    MMAlbum *newAlbum = [MMAlbum createAlbumFromDictionary:json];
-    [self downloadImageForAlbum:newAlbum];
+    MMPlaylist *playlist = [[MMPlaylist alloc] init];
+    playlist.playlistID = [json objectForKey:kMMID];
+    playlist.playlistName = [json objectForKey:kMMPlaylistName];
+    playlist.time = [json objectForKey:kMMPlaylistTS];
+    
+    if([[json objectForKey:kMMPlaylistSongs] isKindOfClass:[NSArray class]]) {
+        NSArray *songs = [json objectForKey:kMMPlaylistSongs];
+        [songs enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+            MMAlbum *newAlbum = [MMAlbum createAlbumFromDictionary:(NSDictionary *)obj];
+            [playlist.songs addObject:newAlbum];
+            [self downloadImageForAlbum:newAlbum];
+        }];
+    }
+    self.result = playlist;
 }
 
 - (void)updateViewController {
-    if([self.results count] == ([[MMDevice sharedInstance].supportedUUIDs count])) {
-        [[NSNotificationCenter defaultCenter] postNotificationName:kDataTaskCompletionNotificationDidFinishLoading object:nil];
-    }
+    [[NSNotificationCenter defaultCenter] postNotificationName:kDataTaskCompletionNotificationDidFinishLoading object:nil];
 }
 
 @end
