@@ -3,15 +3,12 @@
     {
       "idiom" : "universal",
       "scale" : "1x",
-      "filename" : "IMG_3736.png"
+      "filename" : "bg-nobrand.png"
     },
     {
       "idiom" : "universal",
-      "scale" : "2x"
-    },
-    {
-      "idiom" : "universal",
-      "scale" : "3x"
+      "scale" : "2x",
+      "filename" : "bg-nobrand@2x.png"
     }
   ],
   "info" : {

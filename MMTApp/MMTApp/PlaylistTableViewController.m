@@ -19,6 +19,8 @@ static NSString * const kDetailView = @"DetailViewForTableHeaderView";
 
 @interface PlaylistTableViewController ()
 @property (nonatomic, retain) MMAlbum *selectedAlbum;
+@property (nonatomic, retain) NSIndexPath *selectedIndexPath;
+@property (nonatomic, assign) BOOL animateRows;
 @end
 
 @implementation PlaylistTableViewController
@@ -26,25 +28,50 @@ static NSString * const kDetailView = @"DetailViewForTableHeaderView";
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.clearsSelectionOnViewWillAppear = NO;
-    CGRect tableViewFrame = CGRectMake(0.0, 0.0, 320.0, 300.0);
+    _animateRows = NO;
 
+    CGRect tableViewFrame = CGRectMake(0.0, 0.0, 320.0, 300.0);
+    self.currentView = nil;
     self.currentView = [[DetailView alloc] initWithFrame:tableViewFrame];
     [self.tableView setTableHeaderView:self.currentView];
-    MMPlaylist *playlist = (MMPlaylist *)[[MMTNetworkManager sharedInstance] result];
-    
-    NSInteger startingRecordCrop = 3;
-    NSInteger totalRecordsLeft = [playlist.songs count] - startingRecordCrop;
-    self.results = [playlist.songs subarrayWithRange:NSMakeRange(startingRecordCrop, totalRecordsLeft)];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(prepareForAnimationOfRows)
+                                                 name:kDataTaskCompletionNotificationDidFinishLoading
+                                               object:nil];
 }
-
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
+    MMPlaylist *playlist = (MMPlaylist *)[[MMTNetworkManager sharedInstance] result];
+    NSInteger startingRecordCrop = 3;
+    NSInteger totalRecordsLeft = [playlist.songs count] - startingRecordCrop;
+    [self.results enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+        //
+        MMAlbum *al = (MMAlbum *)obj;
+        NSLog(@"Album Name: %@ Album Position: %li", al.title, (unsigned long)al.position);
+    }];
+    self.results = [playlist.songs subarrayWithRange:NSMakeRange(startingRecordCrop, totalRecordsLeft)];
 }
 
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
+    if(_animateRows) {
+        NSUInteger newIndex = [self.results indexOfObject:_selectedAlbum];
+        NSIndexPath *newIndexPath = [NSIndexPath indexPathForRow:newIndex inSection:0];
+        if([_selectedIndexPath compare:newIndexPath] != NSOrderedSame) {
+            [self.tableView moveRowAtIndexPath:_selectedIndexPath toIndexPath:newIndexPath];
+            _animateRows = NO;
+            [self.tableView reloadData];
+        }
+    } else {
+        [self.tableView deselectRowAtIndexPath:_selectedIndexPath animated:YES];
+    }
 }
+
+- (void)prepareForAnimationOfRows {
+    _animateRows = YES;
+}
+
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
@@ -78,48 +105,19 @@ static NSString * const kDetailView = @"DetailViewForTableHeaderView";
 
 - (void)configureCell:(CustomSelectionTableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath {
     MMAlbum *al = (MMAlbum *)[self.results objectAtIndex:[indexPath row]];
+    cell.textLabel.font = [UIFont boldSystemFontOfSize:16.0];
     cell.textLabel.text = al.title;
+    UIFontDescriptor *descriptor = [cell.detailTextLabel.font.fontDescriptor
+                                fontDescriptorWithSymbolicTraits:UIFontDescriptorTraitItalic];
+    cell.detailTextLabel.font = [UIFont fontWithDescriptor:descriptor size:16.0];
     cell.detailTextLabel.text = [NSString stringWithFormat:@"%@ %@", al.artist, al.album];
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     _selectedAlbum = (MMAlbum *)[self.results objectAtIndex:[indexPath row]];
+    _selectedIndexPath = indexPath;
     [self performSegueWithIdentifier:kPushToVoteIdentifier sender:self];
 }
-
-/*
-// Override to support conditional editing of the table view.
-- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
-    // Return NO if you do not want the specified item to be editable.
-    return YES;
-}
-*/
-
-/*
-// Override to support editing the table view.
-- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
-    if (editingStyle == UITableViewCellEditingStyleDelete) {
-        // Delete the row from the data source
-        [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
-    } else if (editingStyle == UITableViewCellEditingStyleInsert) {
-        // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-    }   
-}
-*/
-
-/*
-// Override to support rearranging the table view.
-- (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath {
-}
-*/
-
-/*
-// Override to support conditional rearranging of the table view.
-- (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath {
-    // Return NO if you do not want the item to be re-orderable.
-    return YES;
-}
-*/
 
 #pragma mark - Navigation
 

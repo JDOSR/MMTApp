@@ -15,7 +15,7 @@
 #import "PlaylistTableViewController.h"
 
 static NSString * const cellIdentifier = @"MMTViewControllerIdentifier";
-static NSString * const kLocationText = @"Thank you for visiting our 233 W Jackson Blvd location. Would you like to view the current playlist?";
+static NSString * const kLocationText = @"You are at\n233 W Jackson Blvd\nChicago, IL\n\nDid you know you can influence the music playing in this location?  To play your favorite song, select 'Try Now!' below";
 static NSString * const kCLProximityAlertTitle = @"Beacon Found!";
 static NSString * const kCLProximityAlertMsg = @"New Region ID (%@*) with minor %@";
 
@@ -124,13 +124,13 @@ static NSString * const kCLProximityAlertMsg = @"New Region ID (%@*) with minor 
                                                            message:kLocationText
                                                     preferredStyle:UIAlertControllerStyleAlert];
     
-    UIAlertAction *cancel = [UIAlertAction actionWithTitle:NSLocalizedString(@"Cancel", @"Cancel Action")
-                                                     style:UIAlertActionStyleCancel
+    UIAlertAction *cancel = [UIAlertAction actionWithTitle:NSLocalizedString(@"No Thanks", @"No Thanks")
+                                                     style:UIAlertActionStyleDefault
                                                    handler:^(UIAlertAction *action) {
                                                        _alertController = nil;
                                                    }];
     
-    UIAlertAction *yes = [UIAlertAction actionWithTitle:NSLocalizedString(@"View Playlist", @"View Playlist")
+    UIAlertAction *yes = [UIAlertAction actionWithTitle:NSLocalizedString(@"Try Now!", @"Try Now!")
                                                  style:UIAlertActionStyleDefault
                                                handler:^(UIAlertAction *action) {
                                                    [self launchPlaylist];
@@ -150,6 +150,7 @@ static NSString * const kCLProximityAlertMsg = @"New Region ID (%@*) with minor 
     playlistTableViewController.results = [playlist.songs copy];
     
     UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:playlistTableViewController];
+    navController.navigationItem.title = @"Store Playlist";
     [self presentViewController:navController animated:YES completion:nil];
 }
 

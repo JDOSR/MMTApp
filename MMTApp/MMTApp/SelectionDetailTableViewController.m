@@ -9,6 +9,7 @@
 #import "SelectionDetailTableViewController.h"
 #import "MMAlbum.h"
 #import "MMPlaylist.h"
+#import "MMTNetworkManager.h"
 
 static NSString * const kSingleRowContentIdentifier = @"kSingleRowContentIdentifier";
 
@@ -22,10 +23,28 @@ static NSString * const kSingleRowContentIdentifier = @"kSingleRowContentIdentif
     [super viewDidLoad];
 
     _currentItem = (MMAlbum *)[self.results firstObject];
-    CGRect imageFrame = CGRectMake(0.0, 0.0, 320.0, 320.0);
-    self.coverView = [[UIImageView alloc] initWithFrame:imageFrame];
+    self.cellView.backgroundColor = [UIColor lightGrayColor];
+//    self.bgTexture = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"TexturedBackgroundColor"]];
+
     self.coverView.image = _currentItem.coverArtImage.image;
-    [self.view addSubview:self.coverView];
+    self.textLabel.font = [UIFont boldSystemFontOfSize:16.0];
+    self.textLabel.text = _currentItem.title;
+    self.detailTextLabel.font = [UIFont systemFontOfSize:16.0];
+    self.detailTextLabel.text = [NSString stringWithFormat:@"%@ %@", _currentItem.artist, _currentItem.album];
+}
+
+- (void)viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(returnToPlaylist)
+                                                 name:kDataTaskCompletionNotificationDidFinishLoading
+                                               object:nil];
+    
+}
+
+- (void)viewDidDisappear:(BOOL)animated {
+    [super viewDidDisappear:animated];
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -33,38 +52,16 @@ static NSString * const kSingleRowContentIdentifier = @"kSingleRowContentIdentif
     // Dispose of any resources that can be recreated.
 }
 
-#pragma mark - Table view data source
+- (IBAction)voteTrackUp:(id)sender {
+    [[MMTNetworkManager sharedInstance] postDataWithParams:@{@"song_id": _currentItem.trackId}];
+// Test Code
+//    NSDictionary *success = @{@"success" : @"YES"};
+//    [[NSNotificationCenter defaultCenter] postNotificationName:kDataTaskCompletionNotificationDidFinishLoading
+//                                                        object:success];
 
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    return 1;
 }
 
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return [self.results count];
+- (void)returnToPlaylist {
+    [self.navigationController popToRootViewControllerAnimated:YES];
 }
-
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:kSingleRowContentIdentifier];
-    if(!cell) {
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:kSingleRowContentIdentifier];
-    }
-    cell.textLabel.text = _currentItem.title;
-    cell.detailTextLabel.text = [NSString stringWithFormat:@"%@ %@", _currentItem.artist, _currentItem.album];
-
-    return cell;
-}
-
-
-
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
-
 @end

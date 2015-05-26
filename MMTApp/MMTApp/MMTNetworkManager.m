@@ -10,10 +10,6 @@
 #import "MMDevice.h"
 #import "MMAlbum.h"
 
-static NSString * const kMMDataPlaylistURL = @"https://onlinedj.moodmedia.com/api/v1/playlists/16405.json";
-static NSString * const kNMPOSTUrl = @" https://onlinedj.moodmedia.com/api/v1/playlists/16405/votes.json";
-//{ "song_id": 156558}
-
 @interface MMTNetworkManager()
 
 @property (nonatomic, strong) NSURLSession *session;
@@ -56,6 +52,31 @@ static NSString * const kNMPOSTUrl = @" https://onlinedj.moodmedia.com/api/v1/pl
     }] resume];
 }
 
+- (BOOL)postDataWithParams:(NSDictionary *)params{
+    NSError *error;
+    __block NSDictionary *success = @{@"success": @"NO"};
+    NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:[NSURL URLWithString:kMMPOSTUrl]];
+    [request setHTTPMethod:@"POST"];
+//    [request addValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
+//    [request addValue:@"application/json" forHTTPHeaderField:@"Accept"];
+    NSData *mmData = [NSJSONSerialization dataWithJSONObject:params
+                                                     options:NSJSONWritingPrettyPrinted
+                                                       error:&error];
+    [request setHTTPBody:mmData];
+    
+    [[_session dataTaskWithRequest:request
+                 completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
+                     if(response && !error) {
+                         NSDictionary *json = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:&error];
+                         [self loadData:json];
+                         success = @{@"success" : @"YES"};
+                         [[NSNotificationCenter defaultCenter] postNotificationName:kDataTaskCompletionNotificationDidFinishLoading object:success];
+                     }
+                 }] resume];
+    return NO;
+}
+
+
 - (void)downloadImageForAlbum:(MMAlbum *)album {
     [[_session downloadTaskWithURL:[NSURL URLWithString:album.coverArtURL]
                  completionHandler:^(NSURL *location, NSURLResponse *response, NSError *error) {
@@ -87,7 +108,5 @@ static NSString * const kNMPOSTUrl = @" https://onlinedj.moodmedia.com/api/v1/pl
 }
 
 - (void)updateViewController {
-    [[NSNotificationCenter defaultCenter] postNotificationName:kDataTaskCompletionNotificationDidFinishLoading object:nil];
 }
-
 @end
