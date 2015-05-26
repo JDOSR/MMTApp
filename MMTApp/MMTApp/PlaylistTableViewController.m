@@ -12,6 +12,8 @@
 #import "DetailView.h"
 #import "MMTNetworkManager.h"
 
+#import "UINavigationBar+Custom.h"
+
 static NSString * const kPushToVoteIdentifier = @"pushToVoteIdentifier";
 static NSString * const kPlayListOptionsIdentifier = @"kPlayListOptionsIdentifier";
 
@@ -43,31 +45,51 @@ static NSString * const kDetailView = @"DetailViewForTableHeaderView";
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     MMPlaylist *playlist = (MMPlaylist *)[[MMTNetworkManager sharedInstance] result];
-    NSInteger startingRecordCrop = 3;
+    NSInteger startingRecordCrop = 2;
     NSInteger totalRecordsLeft = [playlist.songs count] - startingRecordCrop;
-    [self.results enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-        //
-        MMAlbum *al = (MMAlbum *)obj;
-        NSLog(@"Album Name: %@ Album Position: %li", al.title, (unsigned long)al.position);
-    }];
-    self.results = [playlist.songs subarrayWithRange:NSMakeRange(startingRecordCrop, totalRecordsLeft)];
+    NSArray *newResults = [playlist.songs subarrayWithRange:NSMakeRange(startingRecordCrop, totalRecordsLeft)];
+    if([self comparePlaylists:newResults]) {
+        self.results = newResults;
+    } else {
+        _animateRows = NO;
+    }
 }
 
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
     if(_animateRows) {
-        NSUInteger newIndex = [self.results indexOfObject:_selectedAlbum];
-        NSIndexPath *newIndexPath = [NSIndexPath indexPathForRow:newIndex inSection:0];
+        NSIndexPath *newIndexPath = [NSIndexPath indexPathForRow:0 inSection:0];
         if([_selectedIndexPath compare:newIndexPath] != NSOrderedSame) {
+            [self.tableView deselectRowAtIndexPath:_selectedIndexPath animated:YES];
             [self.tableView moveRowAtIndexPath:_selectedIndexPath toIndexPath:newIndexPath];
             _animateRows = NO;
-            [self.tableView reloadData];
         }
+        [self performSelector:@selector(reloadTableData) withObject:nil afterDelay:0.5];
     } else {
         [self.tableView deselectRowAtIndexPath:_selectedIndexPath animated:YES];
     }
 }
 
+- (void)reloadTableData {
+    [self.tableView reloadData];
+}
+
+- (BOOL)comparePlaylists:(NSArray *)array {
+    __block BOOL hasChanged = NO;
+    [self.results enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+        MMAlbum *oldAlbum = (MMAlbum *)obj;
+        MMAlbum *newAlbum = (MMAlbum *)[array objectAtIndex:idx];
+        if([oldAlbum.trackId doubleValue] != [newAlbum.trackId doubleValue]) {
+            hasChanged = YES;
+            *stop = YES;
+        }
+    }];
+    return hasChanged;
+}
+
+- (void)dealloc {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
 - (void)prepareForAnimationOfRows {
     _animateRows = YES;
 }

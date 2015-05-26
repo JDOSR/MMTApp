@@ -27,4 +27,12 @@
     [[MMTLocationManager sharedInstance] stopRangingForBeacons];
 }
 
+- (void)applicationDidEnterBackground:(UIApplication *)application {
+    [[MMTLocationManager sharedInstance] stopRangingForBeacons];
+}
+
+- (void)applicationWillEnterForeground:(UIApplication *)application {
+    [[MMTLocationManager sharedInstance] startRangingForBeacons];
+
+}
 @end

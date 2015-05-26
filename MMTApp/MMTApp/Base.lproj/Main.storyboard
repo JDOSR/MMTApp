@@ -109,7 +109,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="TexturedBackgroundColor" translatesAutoresizingMaskIntoConstraints="NO" id="3ky-db-OgY">
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="TexturedBackgroundColor" translatesAutoresizingMaskIntoConstraints="NO" id="3ky-db-OgY">
                                 <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                             </imageView>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="VSt-T5-13f">
@@ -151,9 +151,12 @@
                                     <constraint firstItem="bIG-mw-6Ey" firstAttribute="leading" secondItem="bFo-x2-IZX" secondAttribute="leadingMargin" id="tek-YV-Yi5"/>
                                 </constraints>
                             </view>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="aQt-ns-zSx">
-                                <rect key="frame" x="137" y="472" width="64" height="64"/>
-                                <state key="normal" backgroundImage="thumbsup-white">
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="aQt-ns-zSx">
+                                <rect key="frame" x="0.0" y="435" width="320" height="165"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="320" id="9dc-Dd-J5A"/>
+                                </constraints>
+                                <state key="normal" backgroundImage="upvote">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                                 <connections>
@@ -164,11 +167,17 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="TfI-34-NLK" firstAttribute="top" secondItem="bFo-x2-IZX" secondAttribute="bottom" constant="165" id="3Ck-Jh-PlC"/>
+                            <constraint firstItem="aQt-ns-zSx" firstAttribute="top" secondItem="3ky-db-OgY" secondAttribute="bottom" constant="-165" id="4jj-X4-0vJ"/>
+                            <constraint firstItem="3ky-db-OgY" firstAttribute="bottom" secondItem="aQt-ns-zSx" secondAttribute="bottom" id="Dpo-5T-szI"/>
                             <constraint firstItem="bFo-x2-IZX" firstAttribute="top" secondItem="VSt-T5-13f" secondAttribute="bottom" constant="1" id="M7s-P8-gzx"/>
                             <constraint firstItem="TfI-34-NLK" firstAttribute="top" secondItem="VSt-T5-13f" secondAttribute="bottom" constant="216" id="M9o-oA-jeS"/>
+                            <constraint firstItem="aQt-ns-zSx" firstAttribute="top" secondItem="bFo-x2-IZX" secondAttribute="bottom" id="Met-1U-o7F"/>
+                            <constraint firstItem="3ky-db-OgY" firstAttribute="leading" secondItem="VSt-T5-13f" secondAttribute="leading" id="O2v-tA-4o8"/>
                             <constraint firstItem="bFo-x2-IZX" firstAttribute="leading" secondItem="VSt-T5-13f" secondAttribute="leading" id="O4W-Cy-bIM"/>
                             <constraint firstItem="VSt-T5-13f" firstAttribute="top" secondItem="Lty-pw-n5a" secondAttribute="bottom" id="QcK-oq-b6E"/>
                             <constraint firstItem="VSt-T5-13f" firstAttribute="leading" secondItem="y1j-s1-6JB" secondAttribute="leading" id="UhV-nm-6F9"/>
+                            <constraint firstItem="3ky-db-OgY" firstAttribute="leading" secondItem="aQt-ns-zSx" secondAttribute="leading" id="eTV-SV-hh7"/>
+                            <constraint firstAttribute="trailing" secondItem="3ky-db-OgY" secondAttribute="trailing" id="fB8-5E-1XJ"/>
                         </constraints>
                     </view>
                     <connections>
@@ -188,6 +197,6 @@
     <resources>
         <image name="IMG_3736" width="640" height="1136"/>
         <image name="TexturedBackgroundColor" width="452" height="600"/>
-        <image name="thumbsup-white" width="64" height="64"/>
+        <image name="upvote" width="736" height="500"/>
     </resources>
 </document>

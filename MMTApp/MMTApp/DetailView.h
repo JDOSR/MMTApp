@@ -10,7 +10,7 @@
 
 @interface DetailView : UIView <UITableViewDataSource, UITableViewDelegate>
 @property (retain, nonatomic) IBOutlet UITableView *displayTableView;
-@property (retain, nonatomic) UITextView *textView;
+@property (retain, nonatomic) UIImageView *imageView;
 @property (nonatomic, retain) NSArray *results;
 
 @end

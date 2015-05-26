@@ -13,8 +13,12 @@
 
 static NSString * const kSingleRowContentIdentifier = @"kSingleRowContentIdentifier";
 
+static NSString * const kHighestRatedTitle = @"Highest Rated Track";
+static NSString * const kHighestRatedMsg = @"No need to worry, this track has been rated the most and will play following the track label 'Up Next'.  Thanks for participating, please enjoy your meal!";
+
 @interface SelectionDetailTableViewController ()
 @property (nonatomic, retain) MMAlbum *currentItem;
+@property (nonatomic, retain) UIAlertController *alertController;
 @end
 
 @implementation SelectionDetailTableViewController
@@ -24,41 +28,54 @@ static NSString * const kSingleRowContentIdentifier = @"kSingleRowContentIdentif
 
     _currentItem = (MMAlbum *)[self.results firstObject];
     self.cellView.backgroundColor = [UIColor lightGrayColor];
-//    self.bgTexture = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"TexturedBackgroundColor"]];
 
     self.coverView.image = _currentItem.coverArtImage.image;
     self.textLabel.font = [UIFont boldSystemFontOfSize:16.0];
     self.textLabel.text = _currentItem.title;
     self.detailTextLabel.font = [UIFont systemFontOfSize:16.0];
     self.detailTextLabel.text = [NSString stringWithFormat:@"%@ %@", _currentItem.artist, _currentItem.album];
-}
-
-- (void)viewDidAppear:(BOOL)animated {
-    [super viewDidAppear:animated];
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(returnToPlaylist)
                                                  name:kDataTaskCompletionNotificationDidFinishLoading
                                                object:nil];
+}
+
+- (void)viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
     
 }
 
 - (void)viewDidDisappear:(BOOL)animated {
     [super viewDidDisappear:animated];
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
+- (void)dealloc {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
 
 - (IBAction)voteTrackUp:(id)sender {
-    [[MMTNetworkManager sharedInstance] postDataWithParams:@{@"song_id": _currentItem.trackId}];
-// Test Code
-//    NSDictionary *success = @{@"success" : @"YES"};
-//    [[NSNotificationCenter defaultCenter] postNotificationName:kDataTaskCompletionNotificationDidFinishLoading
-//                                                        object:success];
-
+    if(_currentItem.position > 3) {
+        [[MMTNetworkManager sharedInstance] postDataWithParams:@{@"song_id": _currentItem.trackId}];
+    } else {
+        _alertController = [UIAlertController alertControllerWithTitle:@"Highest Rated Track"
+                                                               message:kHighestRatedMsg
+                                                        preferredStyle:UIAlertControllerStyleAlert];
+        
+        
+        UIAlertAction *thanks = [UIAlertAction actionWithTitle:NSLocalizedString(@"Thanks", @"OK Action")
+                                                     style:UIAlertActionStyleDefault
+                                                   handler:^(UIAlertAction *action) {
+                                                       _alertController = nil;
+                                                       [self returnToPlaylist];
+                                                   }];
+        [_alertController addAction:thanks];
+        [self presentViewController:_alertController animated:YES completion:nil];
+        
+    }
 }
 
 - (void)returnToPlaylist {

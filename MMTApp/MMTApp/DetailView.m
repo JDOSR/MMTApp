@@ -26,13 +26,9 @@ static NSString *const kVendorSuccessString = @"Yes! Your selection has been upd
 - (id)initWithFrame:(CGRect)frame {
     if(self = [super initWithFrame:frame]) {
         CGFloat heightForCustomDisplayTable = 140.0f;
-        CGRect tableFrame = CGRectMake(2.0, 2.0, 316.0, heightForCustomDisplayTable);
-        CGRect labelViewFrame = CGRectMake(8.0, 50.0f+CGRectGetHeight(tableFrame), CGRectGetWidth(tableFrame)-10.0f, 70.0f);
-        CGRect textFieldFrame = CGRectMake(25.0, 2.0, 250.0, heightForCustomDisplayTable/2);
-
-        UIImageView *backgroundImage = [[UIImageView alloc] initWithFrame:frame];
-        backgroundImage.image = [UIImage imageNamed:@"bg-nobrand"];
-        [self addSubview:backgroundImage];
+        CGRect tableFrame = CGRectMake(0.0, 0.0, 320.0, heightForCustomDisplayTable + 1.0);
+        CGRect textFieldFrame = CGRectMake(0.0, 50.0f+CGRectGetHeight(tableFrame), 320.0, 54.0);
+        self.backgroundColor = [UIColor blackColor];
         
         self.displayTableView = [[UITableView alloc] initWithFrame:tableFrame
                                                              style:UITableViewStylePlain];
@@ -44,19 +40,11 @@ static NSString *const kVendorSuccessString = @"Yes! Your selection has been upd
         self.results = [playlist.songs subarrayWithRange:NSMakeRange(0, 2)];
         [self addSubview:self.displayTableView];
         
-        self.textView = [[UITextView alloc] initWithFrame:textFieldFrame];
-        self.textView.text = [NSString stringWithFormat:kVendorTextString];
-
-        self.textView.font = [UIFont boldSystemFontOfSize:18.0f];
-        self.textView.textAlignment = NSTextAlignmentCenter;
-        self.textView.textColor = [UIColor blackColor];
-        self.textView.backgroundColor = [UIColor clearColor];
+        self.imageView = [[UIImageView alloc] initWithFrame:textFieldFrame];
+        self.imageView.backgroundColor = [UIColor clearColor];
+        self.imageView.image = [UIImage imageNamed:@"influence"];
         
-        UIView *labelView = [[UIView alloc] initWithFrame:labelViewFrame];
-        labelView.backgroundColor = [UIColor whiteColor];
-
-        [labelView addSubview:self.textView];
-        [self addSubview:labelView];
+        [self addSubview:self.imageView];
         
         [[NSNotificationCenter defaultCenter] addObserver:self
                                                  selector:@selector(updateLabel:)
@@ -67,12 +55,12 @@ static NSString *const kVendorSuccessString = @"Yes! Your selection has been upd
     return self;
 }
 
-- (void)updateLabel:(NSNotification *)response {
-    NSDictionary *state = response.object;
+- (void)updateLabel:(NSNotification *)notification {
+    NSDictionary *state = notification.object;
     if([state objectForKey:@"success"]) {
-        self.textView.text = [NSString stringWithFormat:kVendorSuccessString];
+        self.imageView.image = [UIImage imageNamed:@"success"];
     } else {
-        self.textView.text = [NSString stringWithFormat:kVendorTextString];
+        self.imageView.image = [UIImage imageNamed:@"influence"];
     }
 }
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
@@ -93,10 +81,12 @@ static NSString *const kVendorSuccessString = @"Yes! Your selection has been upd
 }
 
 - (void)configureCell:(UITableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath {
+    CGRect frame = CGRectMake(100.0, 0.0, 200.0, 20.0);
     
     MMAlbum *al = (MMAlbum *)[self.results objectAtIndex:[indexPath row]];
     cell.textLabel.font = [UIFont boldSystemFontOfSize:16.0];
     cell.textLabel.text = al.title;
+
     cell.imageView.image = [UIImage imageNamed:@"defaultThumbNail"];
     UIFontDescriptor *descriptor = [cell.detailTextLabel.font.fontDescriptor
                                     fontDescriptorWithSymbolicTraits:UIFontDescriptorTraitItalic];
@@ -105,7 +95,6 @@ static NSString *const kVendorSuccessString = @"Yes! Your selection has been upd
     if(al.coverArtImage.image) {
         cell.imageView.image = al.coverArtImage.image;
     }
-    CGRect frame = CGRectMake(100.0, 0.0, 200.0, 20.0);
     switch ([indexPath row]) {
         case 0:{
             
@@ -129,5 +118,9 @@ static NSString *const kVendorSuccessString = @"Yes! Your selection has been upd
 
 - (BOOL)tableView:(UITableView *)tableView shouldHighlightRowAtIndexPath:(NSIndexPath *)indexPath {
     return NO;
+}
+
+- (void)dealloc {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 @end

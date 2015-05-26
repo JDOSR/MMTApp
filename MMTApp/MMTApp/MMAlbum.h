@@ -25,7 +25,7 @@ extern NSString *kMMAlbumTrackID;
 @property (nonatomic, strong) NSString      *last_play_date;
 @property (nonatomic, strong) NSNumber      *duration;
 @property (nonatomic) NSInteger position;
-@property (nonatomic, strong) NSString      *trackId;
+@property (nonatomic, strong) NSNumber      *trackId;
 @property (nonatomic, strong) UIImageView   *coverArtImage;
 
 

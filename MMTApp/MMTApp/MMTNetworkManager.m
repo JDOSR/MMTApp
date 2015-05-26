@@ -54,11 +54,9 @@
 
 - (BOOL)postDataWithParams:(NSDictionary *)params{
     NSError *error;
-    __block NSDictionary *success = @{@"success": @"NO"};
     NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:[NSURL URLWithString:kMMPOSTUrl]];
     [request setHTTPMethod:@"POST"];
-//    [request addValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
-//    [request addValue:@"application/json" forHTTPHeaderField:@"Accept"];
+    [request addValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
     NSData *mmData = [NSJSONSerialization dataWithJSONObject:params
                                                      options:NSJSONWritingPrettyPrinted
                                                        error:&error];
@@ -68,9 +66,12 @@
                  completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
                      if(response && !error) {
                          NSDictionary *json = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:&error];
-                         [self loadData:json];
-                         success = @{@"success" : @"YES"};
-                         [[NSNotificationCenter defaultCenter] postNotificationName:kDataTaskCompletionNotificationDidFinishLoading object:success];
+                         dispatch_sync(dispatch_get_main_queue(), ^{
+                             [self loadData:json];
+                             NSDictionary *success = @{@"success": @"YES"};
+                             [[NSNotificationCenter defaultCenter] postNotificationName:kDataTaskCompletionNotificationDidFinishLoading
+                                                                                 object:success];
+                         });
                      }
                  }] resume];
     return NO;
@@ -85,7 +86,6 @@
                          if(coverImage) {
                              [album.coverArtImage setImage:coverImage];
                          }
-//                        [self updateViewController];
                      }
                  }] resume];
 }
@@ -107,6 +107,4 @@
     self.result = playlist;
 }
 
-- (void)updateViewController {
-}
 @end

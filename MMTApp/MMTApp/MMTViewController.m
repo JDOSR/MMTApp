@@ -15,7 +15,7 @@
 #import "PlaylistTableViewController.h"
 
 static NSString * const cellIdentifier = @"MMTViewControllerIdentifier";
-static NSString * const kLocationText = @"You are at\n233 W Jackson Blvd\nChicago, IL\n\nDid you know you can influence the music playing in this location?  To play your favorite song, select 'Try Now!' below";
+static NSString * const kLocationText = @"You are at\n233 W Jackson Blvd\nChicago, IL\n\nDid you know you can influence the music playing in this location?  To play your favorite song, select 'Try Now!'";
 static NSString * const kCLProximityAlertTitle = @"Beacon Found!";
 static NSString * const kCLProximityAlertMsg = @"New Region ID (%@*) with minor %@";
 
@@ -31,10 +31,6 @@ static NSString * const kCLProximityAlertMsg = @"New Region ID (%@*) with minor 
 #pragma - mark - Registering Observers
 
 - (void)registerViewControllerNotifications {
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(reloadView)
-                                                 name:kDataTaskCompletionNotificationDidFinishLoading
-                                               object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(launchTableViewWithResults:)
                                                  name:kVCLaunchDisplayForLocatedBeacon
@@ -60,8 +56,6 @@ static NSString * const kCLProximityAlertMsg = @"New Region ID (%@*) with minor 
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-
-//    [MMTLocationManager sharedInstance].viewController = self;
     _alertController = nil;
     
     [self registerViewControllerNotifications];
@@ -112,11 +106,11 @@ static NSString * const kCLProximityAlertMsg = @"New Region ID (%@*) with minor 
     
 }
 
-- (void)reloadView {
-    [_indicatorView stopAnimating];
-//    self.results = [[MMTNetworkManager sharedInstance].results copy];
-
-}
+//- (void)reloadView {
+//    [_indicatorView stopAnimating];
+//    //self.results = [[MMTNetworkManager sharedInstance].results copy];
+//
+//}
 
 - (IBAction)launchTableViewWithResults:(id)sender {
     [[MMTNetworkManager sharedInstance] buildURLRequests];
@@ -131,7 +125,7 @@ static NSString * const kCLProximityAlertMsg = @"New Region ID (%@*) with minor 
                                                    }];
     
     UIAlertAction *yes = [UIAlertAction actionWithTitle:NSLocalizedString(@"Try Now!", @"Try Now!")
-                                                 style:UIAlertActionStyleDefault
+                                                 style:UIAlertActionStyleCancel
                                                handler:^(UIAlertAction *action) {
                                                    [self launchPlaylist];
                                                }];
@@ -144,13 +138,19 @@ static NSString * const kCLProximityAlertMsg = @"New Region ID (%@*) with minor 
 
 - (void)launchPlaylist {
     UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
+    
     PlaylistTableViewController *playlistTableViewController = (PlaylistTableViewController *)[storyboard instantiateViewControllerWithIdentifier:@"PlaylistViewController"];
-//    PlaylistTableViewController *playlistTableViewController = [[PlaylistTableViewController alloc] init];
     MMPlaylist *playlist = (MMPlaylist *)[[MMTNetworkManager sharedInstance] result];
     playlistTableViewController.results = [playlist.songs copy];
     
     UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:playlistTableViewController];
-    navController.navigationItem.title = @"Store Playlist";
+    playlistTableViewController.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel
+                                                                                                                  target:self
+                                                                                                                  action:@selector(closeView)];
+    [[UINavigationBar appearance] setBackgroundImage:[UIImage imageNamed:@"header_mcd"]
+                                      forBarPosition:UIBarPositionTopAttached
+                                          barMetrics:UIBarMetricsDefault];
+    [[UINavigationBar appearance] setTintColor:[UIColor yellowColor]];
     [self presentViewController:navController animated:YES completion:nil];
 }
 
@@ -181,4 +181,7 @@ static NSString * const kCLProximityAlertMsg = @"New Region ID (%@*) with minor 
     
 }
 
+- (void)closeView {
+    [self dismissViewControllerAnimated:YES completion:nil];
+}
 @end
